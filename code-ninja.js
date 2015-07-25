@@ -1,9 +1,20 @@
 window.onload = function() {
+    function drawSky() {
+        var sky = new Kinetic.Rect({
+            x: CONSTANTS.MAP_START,
+            y: 0,
+            width: CONSTANTS.MAP_WIDTH,
+            height: CONSTANTS.MAP_HEIGHT,
+            fill: 'lightblue'
+        });
+
+        layer.add(sky);
+    }
 
     function drawGround() {
         var i,
             len,
-            groundCell
+            groundCell;
 
         for (i = 0, len = CONSTANTS.MAP_WIDTH / CONSTANTS.GROUND_CELL_WIDTH; i < len; i += 1) {
             groundCell = new Kinetic.Rect({
@@ -28,10 +39,12 @@ window.onload = function() {
         }
     }
 
-    function drawBigDarkBushes() {
+    function drawBigDarkBushes(startScreen, endScreen) {
         var i,
             len,
-            startingPoints = [0, 49, 97, 147, 208],
+            startingPoints = bigDarkBushesInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 5 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 5 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
             startX,
             y = CONSTANTS.GROUND_HEIGHT + 5,
             darkBush;
@@ -57,10 +70,12 @@ window.onload = function() {
         }
     }
 
-    function drawSmallDarkBushes() {
+    function drawSmallDarkBushes(startScreen, endScreen) {
         var i,
             len,
-            startingPoints = [17, 65, 113, 172],
+            startingPoints = smallDarkBushesInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 3 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 3 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
             startX,
             y = CONSTANTS.GROUND_HEIGHT + 5,
             darkBush;
@@ -84,31 +99,18 @@ window.onload = function() {
         }
     }
 
-    function drawBigLightBushes() {
+    function drawBigLightBushes(startScreen, endScreen) {
         var i,
             len,
-            startingPoints = [12, 61, 91, 141],
+            startingPoints = bigLightBushesInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 4 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 4 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
             startX,
             y = CONSTANTS.GROUND_HEIGHT + 5,
             lightBush;
 
         for (i = 0, len = startingPoints.length; i < len; i += 1) {
             startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-            //darkBush = new Kinetic.Line({
-            //    points: [startX, y,
-            //        startX + 50, y - 120,
-            //        startX + 110, y - 165,
-            //        startX + 150, y - 170,
-            //        startX + 210, y - 100,
-            //        startX + 250, y - 65,
-            //        startX + 300, y],
-            //    stroke: 'black',
-            //    fill: '#22B14C',
-            //    strokeWidth: 2,
-            //    lineJoin: 'round',
-            //    closed: true,
-            //    tension: 0.2
-            //});
 
             lightBush = new Kinetic.Line({
                 points: [startX, y,
@@ -132,10 +134,12 @@ window.onload = function() {
         }
     }
 
-    function drawSmallLightBushes() {
+    function drawSmallLightBushes(startScreen, endScreen) {
         var i,
             len,
-            startingPoints = [25, 43, 73, 109, 121, 180],
+            startingPoints = smallLightBushesInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 2 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 2 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
             startX,
             y = CONSTANTS.GROUND_HEIGHT + 5,
             lightBush;
@@ -161,10 +165,12 @@ window.onload = function() {
         }
     }
 
-    function drawPipes() {
+    function drawPipes(startScreen, endScreen) {
         var i,
             len,
-            startingPoints = [29, 39, 47, 58, 175, 195],
+            startingPoints = pipesInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 2 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 2 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
             startX,
             y = CONSTANTS.GROUND_HEIGHT,
             pipe;
@@ -196,10 +202,12 @@ window.onload = function() {
         }
     }
 
-    function drawSpecialBricks() {
+    function drawSpecialBricks(startScreen, endScreen) {
         var i,
             len,
-            startingPoints = [17, 22, 24, 66, 67, 68, 89, 107, 110, 113, 131, 134, 157, 158, 159, 165, 166, 182, 184, 186],
+            startingPoints = specialBricksInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 1 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 1 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
             startX,
             y = CONSTANTS.FIRST_RAW_BRICK_HEIGHT,
             specialBrick;
@@ -220,10 +228,12 @@ window.onload = function() {
         }
     }
 
-    function drawRegularBricks() {
+    function drawRegularBricks(startScreen, endScreen) {
         var i,
             len,
-            startingPoints = [21, 23, 25, 65, 69, 88, 90, 95, 101, 102, 119, 132, 133, 160, 161, 162, 163, 164, 167, 168, 183, 185],
+            startingPoints = regularBricksInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 1 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 1 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
             startX,
             y = CONSTANTS.FIRST_RAW_BRICK_HEIGHT,
             regularBrick;
@@ -244,12 +254,14 @@ window.onload = function() {
         }
     }
 
-    function drawUpStairs() {
+    function drawUpStairs(startScreen, endScreen) {
         var i,
             j,
             k,
             len,
-            startingPoints = [137, 200],
+            startingPoints = upstairsInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 4 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 4 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
             startX,
             stairsHeight = 4,
             x,
@@ -279,12 +291,14 @@ window.onload = function() {
         }
     }
 
-    function drawDownStairs() {
+    function drawDownStairs(startScreen, endScreen) {
         var i,
             j,
             k,
             len,
-            startingPoints = [143, 206],
+            startingPoints = downstairsInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 4 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 4 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
             startX,
             stairsHeight = 4,
             x,
@@ -314,48 +328,111 @@ window.onload = function() {
         }
     }
 
+    function calculateNewCoordinates(updateX) {
+        bigDarkBushesInScreenCoordinates = bigDarkBushesInScreenCoordinates.map(function(itemX) {
+            return itemX + updateX;
+        });
+        smallDarkBushesInScreenCoordinates = smallDarkBushesInScreenCoordinates.map(function(itemX) {
+            return itemX + updateX;
+        });
+        bigLightBushesInScreenCoordinates = bigLightBushesInScreenCoordinates.map(function(itemX) {
+            return itemX + updateX;
+        });
+        smallLightBushesInScreenCoordinates = smallLightBushesInScreenCoordinates.map(function(itemX) {
+            return itemX + updateX;
+        });
+        pipesInScreenCoordinates = pipesInScreenCoordinates.map(function(itemX) {
+            return itemX + updateX;
+        });
+        regularBricksInScreenCoordinates = regularBricksInScreenCoordinates.map(function(itemX) {
+            return itemX + updateX;
+        });
+        specialBricksInScreenCoordinates = specialBricksInScreenCoordinates.map(function(itemX) {
+            return itemX + updateX;
+        });
+        upstairsInScreenCoordinates = upstairsInScreenCoordinates.map(function(itemX) {
+            return itemX + updateX;
+        });
+        downstairsInScreenCoordinates = downstairsInScreenCoordinates.map(function(itemX) {
+            return itemX + updateX;
+        });
+    }
+
+    function drawLandscape() {
+        drawSky();
+        drawBigDarkBushes(screenStart, screenEnd);
+        drawSmallDarkBushes(screenStart, screenEnd);
+        drawBigLightBushes(screenStart, screenEnd);
+        drawSmallLightBushes(screenStart, screenEnd);
+        drawPipes(screenStart, screenEnd);
+        drawRegularBricks(screenStart, screenEnd);
+        drawSpecialBricks(screenStart, screenEnd);
+        drawUpStairs(screenStart, screenEnd);
+        drawDownStairs(screenStart, screenEnd);
+        drawGround();
+    }
 
     var stage,
-        layer;
-    var CONSTANTS = {
-        MAP_START : 0,
-        MAP_END : 12000,
-        MAP_WIDTH : 12000,
-        MAP_HEIGHT : 500,
-        GROUND_CELL_WIDTH: 50,
-        GROUND_CELL_HEIGHT: 50,
-        GROUND_HEIGHT: 400,
-        FIRST_RAW_BRICK_HEIGHT: 200
-    };
+        layer,
+        CONSTANTS = {
+            MAP_START : 0,
+            MAP_END : 12000,
+            MAP_WIDTH : 12000,
+            MAP_HEIGHT : 500,
+            SCREEN_WIDTH : 1200,
+            GROUND_CELL_WIDTH: 50,
+            GROUND_CELL_HEIGHT: 50,
+            GROUND_HEIGHT: 400,
+            FIRST_RAW_BRICK_HEIGHT: 200,
+            INITIAL_BIG_DARK_BUSHES_COORDINATES : [0, 49, 97, 147, 208],
+            INITIAL_SMALL_DARK_BUSHES_COORDINATES : [17, 65, 113, 172],
+            INITIAL_BIG_LIGHT_BUSHES_COORDINATES : [12, 61, 91, 141],
+            INITIAL_SMALL_LIGHT_BUSHES_COORDINATES : [25, 43, 73, 109, 121, 180],
+            INITIAL_PIPES_COORDINATES : [29, 39, 47, 58, 175, 195],
+            INITIAL_SPECIAL_BRICKS_COORDINATES : [17, 22, 24, 66, 67, 68, 89, 107, 110, 113, 131, 134, 157, 158, 159, 165, 166, 182, 184, 186],
+            INITIAL_REGULAR_BRICKS_COORDINATES : [21, 23, 25, 65, 69, 88, 90, 95, 101, 102, 119, 132, 133, 160, 161, 162, 163, 164, 167, 168, 183, 185],
+            INITIAL_UPSTAIRS_COORDINATES : [137, 200],
+            INITIAL_DOWNSTAIRS_COORDINATES : [143, 206]
+        },
+        bigDarkBushesInScreenCoordinates = CONSTANTS.INITIAL_BIG_DARK_BUSHES_COORDINATES,
+        smallDarkBushesInScreenCoordinates = CONSTANTS.INITIAL_SMALL_DARK_BUSHES_COORDINATES,
+        bigLightBushesInScreenCoordinates = CONSTANTS.INITIAL_BIG_LIGHT_BUSHES_COORDINATES,
+        smallLightBushesInScreenCoordinates = CONSTANTS.INITIAL_SMALL_LIGHT_BUSHES_COORDINATES,
+        pipesInScreenCoordinates = CONSTANTS.INITIAL_PIPES_COORDINATES,
+        specialBricksInScreenCoordinates = CONSTANTS.INITIAL_SPECIAL_BRICKS_COORDINATES,
+        regularBricksInScreenCoordinates = CONSTANTS.INITIAL_REGULAR_BRICKS_COORDINATES,
+        upstairsInScreenCoordinates = CONSTANTS.INITIAL_UPSTAIRS_COORDINATES,
+        downstairsInScreenCoordinates = CONSTANTS.INITIAL_DOWNSTAIRS_COORDINATES,
+        screenStart = 0,
+        screenEnd = screenStart + CONSTANTS.SCREEN_WIDTH;
 
     stage = new Kinetic.Stage({
         container: 'container',
-        width: CONSTANTS.MAP_WIDTH,
+        width: CONSTANTS.SCREEN_WIDTH,
         height: CONSTANTS.MAP_HEIGHT,
         fill: 'lightblue'
     });
     layer = new Kinetic.Layer();
-    var sky = new Kinetic.Rect({
-        x: CONSTANTS.MAP_START,
-        y: 0,
-        width: CONSTANTS.MAP_WIDTH,
-        height: CONSTANTS.MAP_HEIGHT,
-        fill: 'lightblue'
+
+    document.body.addEventListener('keydown', function(ev) {
+        var update;
+
+        switch (ev.keyCode) {
+            case 37:
+                update = 1;
+                break; // left
+            case 39:
+                update = -1;
+                break; // right
+        }
+
+        console.log('Clicked');
+        layer = new Kinetic.Layer();
+        calculateNewCoordinates(update);
+        drawLandscape();
+        return stage.add(layer);
     });
 
-
-
-    layer.add(sky);
-    drawBigDarkBushes();
-    drawSmallDarkBushes();
-    drawBigLightBushes();
-    drawSmallLightBushes();
-    drawPipes();
-    drawRegularBricks();
-    drawSpecialBricks();
-    drawUpStairs();
-    drawDownStairs();
-    drawGround();
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
     //TODO: Second  raw of bricks
     //TODO: Enemies
@@ -366,7 +443,13 @@ window.onload = function() {
     //TODO: Events for keyboard arrows
     //TODO: Implement bonusJS for special bricks
 
+    function anim() {
+        layer = new Kinetic.Layer();
+        drawLandscape();
+        //setTimeout(anim, 10);
+        return stage.add(layer);
+    }
 
-    return stage.add(layer);
+    anim();
 
 };
