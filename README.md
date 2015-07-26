@@ -17,9 +17,9 @@ Penging Tasks:
 - Draw BGCoder on SVG - Roosevelt
 - Implement addEventListener for collected bonus codes - Roosevelt
 - Implement jumping animation of hero - Jenny
-- Implement functions that check for collision with another objects when hero is jumping - Jenny
+- Implement functions to check for collision with another objects when hero is jumping - Jenny
 - Add bonus codes - Kalin
-- Add custom event when hero is on bonus code
+- Add custom event when hero is on bonus code - Kalin
 
 
 This document describes the teamwork assignment for Telerik Academy students in JavaScript
