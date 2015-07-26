@@ -4,6 +4,24 @@ An exciting game dedicated to all Telerik Ninjas (JS UI Paradise team)
 #JavaScript DOM & UI: Teamwork Assignment
 *****************************************
 
+Task List:
+- Implement function to check for collision with another objects when hero is walking
+- Add enemies
+- Implement enemies to throw exceptions to hero
+- Draw flag at the end of level
+- Draw start menu, start/rules/quit buttons
+- Add rules
+
+Penging Tasks:
+- Draw Hero - Dushka
+- Draw BGCoder on SVG - Roosevelt
+- Implement addEventListener for collected bonus codes - Roosevelt
+- Implement jumping animation of hero - Jenny
+- Implement functions that check for collision with another objects when hero is jumping - Jenny
+- Add bonus codes - Kalin
+- Add custom event when hero is on bonus code
+
+
 This document describes the teamwork assignment for Telerik Academy students in JavaScript
 UI & DOM course
 
