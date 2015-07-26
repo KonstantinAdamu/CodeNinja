@@ -328,6 +328,31 @@ window.onload = function() {
         }
     }
 
+    function drawText(startScreen, endScreen) {
+        var i,
+            len,
+            startingPoints = textInScreenCoordinates.filter(function(coord) {
+                return ((coord  >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 1 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 1 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
+            }),
+            startX,
+            y = CONSTANTS.GROUND_HEIGHT,
+            text;
+
+        for (i = 0, len = startingPoints.length; i < len; i += 1) {
+            startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
+
+            text = new Kinetic.Text({
+                x: startX,
+                y: y + 10,
+                text: 'JS',
+                fontSize: 40,
+                fontFamily: 'Arial',
+                fill: '#A0F'
+            });
+            layer.add(text);
+        }
+    }
+
     function calculateNewCoordinates(updateX) {
         bigDarkBushesInScreenCoordinates = bigDarkBushesInScreenCoordinates.map(function(itemX) {
             return itemX + updateX;
@@ -370,10 +395,14 @@ window.onload = function() {
         drawUpStairs(screenStart, screenEnd);
         drawDownStairs(screenStart, screenEnd);
         drawGround();
+        drawText(screenStart, screenEnd);
+        hero.draw(heroX, heroY);
+
     }
 
     var stage,
         layer,
+        heroLayer,
         CONSTANTS = {
             MAP_START : 0,
             MAP_END : 12000,
@@ -392,7 +421,8 @@ window.onload = function() {
             INITIAL_SPECIAL_BRICKS_COORDINATES : [17, 22, 24, 66, 67, 68, 89, 107, 110, 113, 131, 134, 157, 158, 159, 165, 166, 182, 184, 186],
             INITIAL_REGULAR_BRICKS_COORDINATES : [21, 23, 25, 65, 69, 88, 90, 95, 101, 102, 119, 132, 133, 160, 161, 162, 163, 164, 167, 168, 183, 185],
             INITIAL_UPSTAIRS_COORDINATES : [137, 200],
-            INITIAL_DOWNSTAIRS_COORDINATES : [143, 206]
+            INITIAL_DOWNSTAIRS_COORDINATES : [143, 206],
+            INITIAL_TEXT_COORDINATES : [17]
         },
         bigDarkBushesInScreenCoordinates = CONSTANTS.INITIAL_BIG_DARK_BUSHES_COORDINATES,
         smallDarkBushesInScreenCoordinates = CONSTANTS.INITIAL_SMALL_DARK_BUSHES_COORDINATES,
@@ -403,8 +433,11 @@ window.onload = function() {
         regularBricksInScreenCoordinates = CONSTANTS.INITIAL_REGULAR_BRICKS_COORDINATES,
         upstairsInScreenCoordinates = CONSTANTS.INITIAL_UPSTAIRS_COORDINATES,
         downstairsInScreenCoordinates = CONSTANTS.INITIAL_DOWNSTAIRS_COORDINATES,
+        textInScreenCoordinates = CONSTANTS.INITIAL_TEXT_COORDINATES,
         screenStart = 0,
-        screenEnd = screenStart + CONSTANTS.SCREEN_WIDTH;
+        screenEnd = screenStart + CONSTANTS.SCREEN_WIDTH,
+        heroX = 250,
+        heroY = 300;
 
     stage = new Kinetic.Stage({
         container: 'container',
@@ -413,6 +446,26 @@ window.onload = function() {
         fill: 'lightblue'
     });
     layer = new Kinetic.Layer();
+    heroLayer = new Kinetic.Layer();
+
+    var hero = {
+        top: 300,
+        right: 300,
+        bottom: 400,
+        left: 250,
+        draw: function(left, top) {
+            var h = new Kinetic.Rect({
+                x: left,
+                y: top,
+                width: 50,
+                height: 100,
+                stroke: 'yellow',
+                fill: 'orange',
+                strokeWidth: 2
+            });
+            layer.add(h);
+        }
+    };
 
     document.body.addEventListener('keydown', function(ev) {
         var update;
