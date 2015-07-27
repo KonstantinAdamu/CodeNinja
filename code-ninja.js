@@ -1,4 +1,4 @@
-window.onload = function() {
+window.onload = function () {
     function drawSky() {
         var sky = new Kinetic.Rect({
             x: CONSTANTS.MAP_START,
@@ -421,13 +421,13 @@ window.onload = function() {
     }
 
     function checkIfNinjaIsOnBonusCode() {
-        return textInScreenCoordinates.some(function(coord) {
+        return textInScreenCoordinates.some(function (coord) {
             return ninja.left / 50 === coord && ninja.bottom === CONSTANTS.FIRST_RAW_BRICK_HEIGHT;
         })
     }
 
     function checkForLeftCollision() {
-        var isInColliseWithPipe = pipesInScreenCoordinates.some(function(coord) {
+        var isInColliseWithPipe = pipesInScreenCoordinates.some(function (coord) {
             return ninja.left / 50 === coord + 2 && ninja.bottom >= CONSTANTS.GROUND_HEIGHT - 165;
         });
 
@@ -435,7 +435,7 @@ window.onload = function() {
     }
 
     function checkForRightCollision() {
-        var isInColliseWithPipe = pipesInScreenCoordinates.some(function(coord) {
+        var isInColliseWithPipe = pipesInScreenCoordinates.some(function (coord) {
             return ninja.right / 50 === coord && ninja.bottom >= CONSTANTS.GROUND_HEIGHT - 165;
         });
 
@@ -483,7 +483,7 @@ window.onload = function() {
             GROUND_CELL_WIDTH: 50,
             GROUND_CELL_HEIGHT: 50,
             GROUND_HEIGHT: 400,
-            TEXT_HEIGHT : 200, //TODO: 200
+            TEXT_HEIGHT: 200, //TODO: 200
             FIRST_RAW_BRICK_HEIGHT: 200,
             INITIAL_BIG_DARK_BUSHES_COORDINATES: [0, 49, 97, 147, 208],
             INITIAL_SMALL_DARK_BUSHES_COORDINATES: [17, 65, 113, 172],
@@ -612,7 +612,7 @@ window.onload = function() {
 
     var event = new CustomEvent('collectCoin');
 
-    document.body.addEventListener('collectCoin', function() {
+    document.body.addEventListener('collectCoin', function () {
         console.log('Coin collected!!!');
     });
 
@@ -644,6 +644,94 @@ window.onload = function() {
         }
     });
 
+    function drawScoreBoard() {
+        var svgNameSpace,
+            drawingBoard,
+            containerForScoreBoardNodes,
+            CONSTANTS = {
+                SCORECOUNTER_X_COORD: 963,
+                SCORECOUNTER_Y_COORD: 37,
+                TOTALPOINTS_X_COORD: 1020,
+                TOTALPOINTS_Y_COORD: 37
+            };
+
+        svgNameSpace = 'http://www.w3.org/2000/svg';
+        drawingBoard = document.getElementById('scoreBoardSvg');
+
+        function drawScoreBoardNumbers(x, y, value) {
+            var scoreBoard,
+                textNode;
+
+            scoreBoard = document.createElementNS(svgNameSpace, 'text');
+            scoreBoard.setAttribute('x', x);
+            scoreBoard.setAttribute('y', y);
+            scoreBoard.setAttribute('font-family', 'Arial Black, Gadget, sans-serif');
+            scoreBoard.setAttribute('fill', 'white');
+            scoreBoard.setAttribute('stroke-width','1.3');
+            scoreBoard.setAttribute('stroke', 'black');
+            scoreBoard.setAttribute('font-size', '32');
+            textNode = document.createTextNode(value);
+            scoreBoard.appendChild(textNode);
+
+            return scoreBoard;
+        }
+
+        function drawScoreBoardForwardSlash() {
+            var forwardSlash;
+            forwardSlash = document.createElementNS(svgNameSpace, 'path');
+            forwardSlash.setAttribute('d', 'M 992 37 L 1004 37  L 1013 14 L 1001 14 z')
+            forwardSlash.setAttribute('fill', 'white');
+            forwardSlash.setAttribute('stroke', 'black');
+
+            return forwardSlash;
+        }
+
+        containerForScoreBoardNodes = document.createDocumentFragment();
+        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.SCORECOUNTER_X_COORD, CONSTANTS.SCORECOUNTER_Y_COORD, '0'));
+        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.TOTALPOINTS_X_COORD, CONSTANTS.TOTALPOINTS_Y_COORD, '100'));
+        containerForScoreBoardNodes.appendChild(drawScoreBoardForwardSlash());
+
+        // TODO: implement functionality;
+        function insertTick(x, y) {
+            var tick;
+
+            tick = document.createElementNS(svgNameSpace, 'image');
+            tick.setAttribute('x', x);
+            tick.setAttribute('y', y);
+            tick.setAttribute('height', '38');
+            tick.setAttribute('width', '25');
+            tick.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/tick.png');
+
+            return tick;
+        }
+
+        function insertCross(x, y) {
+            var cross;
+
+            cross = document.createElementNS(svgNameSpace, 'image');
+            cross.setAttribute('x', x);
+            cross.setAttribute('y', y);
+            cross.setAttribute('height', '38');
+            cross.setAttribute('width', '25');
+            cross.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/cross.png');
+
+            return cross;
+        }
+
+        // The variable below contains the initial drawing of the scoreboard - 30 crosses,
+        // should not serve other purposes.
+        var initialCrossFragment = document.createDocumentFragment();
+
+        for (var i = 0; i < 30; i += 1) {
+            var cross = insertCross(10 + i * 30, 7);
+            initialCrossFragment.appendChild(cross);
+        }
+
+        drawingBoard.appendChild(containerForScoreBoardNodes);
+        drawingBoard.appendChild(initialCrossFragment);
+    }
+
+
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
     //TODO: Second  raw of bricks
     //TODO: Enemies
@@ -657,6 +745,7 @@ window.onload = function() {
     function anim() {
         layer = new Kinetic.Layer();
         drawLandscape();
+        drawScoreBoard();
         //setTimeout(anim, 10);
         return stage.add(layer);
     }
