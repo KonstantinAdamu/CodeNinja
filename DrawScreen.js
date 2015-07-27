@@ -515,6 +515,23 @@ var DrawScreen = (function () {
             calculateNewCoordinates.call(this,upd);
             drawLandscape.call(this);
             this.stage.clear();
+
+            this.layer.toImage({
+                width: this.stage.width,
+                height: this.stage.height,
+                callback: function (img) {
+                    var image = new Kinetic.Image({
+                        image: img,
+                        x: 0,
+                        y: 0
+                    });
+                    this.layer.removeChildren();
+
+                    this.layer.add(image);
+                    //this.stage.add(this.layer);
+                    //this.stage.draw();
+                }
+            })
             this.stage.add(this.layer);
             //this.layer.draw();
             updateNinja.call(this);

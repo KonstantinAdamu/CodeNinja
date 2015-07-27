@@ -416,7 +416,8 @@ window.onload = function () {
 
         layer.add(eye)
     };
-    drawJumpingNinja = function () {
+
+    var drawJumpingNinja = function () {
         drawNinjaPart(cloak, 'yellowgreen', 'yellowgreen', 0.2);
         drawNinjaPart(arm, 'yellowgreen', 'black', 0.4)
         drawNinjaPart(body, 'yellowgreen', 'black', 0.5);
