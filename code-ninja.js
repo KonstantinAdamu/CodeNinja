@@ -667,6 +667,7 @@ window.onload = function () {
             scoreBoard.setAttribute('y', y);
             scoreBoard.setAttribute('font-family', 'Arial Black, Gadget, sans-serif');
             scoreBoard.setAttribute('fill', 'white');
+            scoreBoard.setAttribute('stroke-width','1.3');
             scoreBoard.setAttribute('stroke', 'black');
             scoreBoard.setAttribute('font-size', '32');
             textNode = document.createTextNode(value);
@@ -699,7 +700,7 @@ window.onload = function () {
             tick.setAttribute('y', y);
             tick.setAttribute('height', '38');
             tick.setAttribute('width', '25');
-            tick.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'images/tick.png');
+            tick.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/tick.png');
 
             return tick;
         }
@@ -712,7 +713,7 @@ window.onload = function () {
             cross.setAttribute('y', y);
             cross.setAttribute('height', '38');
             cross.setAttribute('width', '25');
-            cross.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'images/cross.png');
+            cross.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/cross.png');
 
             return cross;
         }
