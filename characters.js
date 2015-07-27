@@ -81,11 +81,9 @@ var Characters = function() {
         rightEyebrow = [
             startX + 95, startY + 36,
             startX + 102, startY + 25,
-        ]
+        ];
 
-    });
-
-    tempStage = new Kinetic.Stage({
+    var tempStage = new Kinetic.Stage({
         container: 'canvas-cont',
         width: 800,
         height: 600
@@ -106,7 +104,7 @@ var Characters = function() {
         layer.add(drawEye(startX + 100, startY + 34, 4, 'black'));
 
         tempStage.add(layer);
-        }
+    }
 
         function drawNinjaPart(points, strokeColor, fillColor, tension) {
             var jumpingNinja = new Kinetic.Line({
@@ -119,7 +117,7 @@ var Characters = function() {
             });
 
             return jumpingNinja;
-        };
+        }
 
         function drawLine(points, strokeColor, width) {
             var line = new Kinetic.Line({
@@ -129,7 +127,7 @@ var Characters = function() {
             });
 
             return line;
-        };
+        }
 
         function drawEye(x, y, radius, color) {
             var eye = new Kinetic.Circle({
@@ -140,26 +138,11 @@ var Characters = function() {
             });
 
             return eye;
-        };
-
-        //function drawJumpingNinja () {
-            //drawNinjaPart(cloak, 'yellowgreen', 'yellowgreen', 0.2);
-            //drawNinjaPart(arm, 'yellowgreen', 'black', 0.4)
-            //drawNinjaPart(body, 'yellowgreen', 'black', 0.5);
-            //drawNinjaPart(head, 'yellowgreen', 'black', 0.4);
-            //drawNinjaPart(face, 'black', 'white', 0.4);
-            //drawLine(logo, 'yellowgreen', 2);
-            //drawLine(leftEyebrow, 'black', 3);
-            //drawLine(rightEyebrow, 'black', 3);
-            //drawEye(startX + 73, startY + 48, 5, 'black');
-            //drawEye(startX + 100, startY + 34, 4, 'black');
-
-           //return stage.add(layer);
-        //};
+        }
 
         var tempCanvas = document.getElementById("canvas");
         var context = tempCanvas.getContext("2d");
 
-        return
-    }
+
+
 }();
