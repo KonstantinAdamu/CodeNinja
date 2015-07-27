@@ -1,4 +1,4 @@
-window.onload = function () {
+window.onload = function() {
     function drawSky() {
         var sky = new Kinetic.Rect({
             x: CONSTANTS.MAP_START,
@@ -335,7 +335,7 @@ window.onload = function () {
                 return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 1 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 1 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
             }),
             startX,
-            y = CONSTANTS.GROUND_HEIGHT,
+            y = CONSTANTS.TEXT_HEIGHT - 50,
             text;
 
         for (i = 0, len = startingPoints.length; i < len; i += 1) {
@@ -351,6 +351,40 @@ window.onload = function () {
             });
             layer.add(text);
         }
+    }
+
+    function drawNinjaPart(points, strokeColor, fillColor, tension) {
+        var jumpingNinja = new Kinetic.Line({
+            points: points,
+            stroke: strokeColor,
+            fill: fillColor,
+            strokeWidth: 4,
+            tension: tension,
+            closed: true
+        });
+
+        layer.add(jumpingNinja);
+    }
+
+    function drawLine(points, strokeColor, width) {
+        var line = new Kinetic.Line({
+            points: points,
+            stroke: strokeColor,
+            strokeWidth: width,
+        });
+
+        layer.add(line);
+    }
+
+    function drawEye(x, y, radius, color) {
+        var eye = new Kinetic.Circle({
+            x: x,
+            y: y,
+            radius: radius,
+            fill: color
+        });
+
+        layer.add(eye)
     }
 
     function calculateNewCoordinates(updateX) {
@@ -381,42 +415,34 @@ window.onload = function () {
         downstairsInScreenCoordinates = downstairsInScreenCoordinates.map(function (itemX) {
             return itemX + updateX;
         });
+        textInScreenCoordinates = textInScreenCoordinates.map(function (itemX) {
+            return itemX + updateX;
+        });
     }
 
-    function drawNinjaPart(points, strokeColor, fillColor, tension) {
-        jumpingNinja = new Kinetic.Line({
-            points: points,
-            stroke: strokeColor,
-            fill: fillColor,
-            strokeWidth: 4,
-            tension: tension,
-            closed: true
+    function checkIfNinjaIsOnBonusCode() {
+        return textInScreenCoordinates.some(function(coord) {
+            return ninja.left / 50 === coord && ninja.bottom === CONSTANTS.FIRST_RAW_BRICK_HEIGHT;
+        })
+    }
+
+    function checkForLeftCollision() {
+        var isInColliseWithPipe = pipesInScreenCoordinates.some(function(coord) {
+            return ninja.left / 50 === coord + 2 && ninja.bottom >= CONSTANTS.GROUND_HEIGHT - 165;
         });
 
-        layer.add(jumpingNinja);
-    };
+        return isInColliseWithPipe;
+    }
 
-    function drawLine(points, strokeColor, width) {
-        line = new Kinetic.Line({
-            points: points,
-            stroke: strokeColor,
-            strokeWidth: width,
+    function checkForRightCollision() {
+        var isInColliseWithPipe = pipesInScreenCoordinates.some(function(coord) {
+            return ninja.right / 50 === coord && ninja.bottom >= CONSTANTS.GROUND_HEIGHT - 165;
         });
 
-        layer.add(line);
-    };
+        return isInColliseWithPipe;
+    }
 
-    function drawEye(x, y, radius, color) {
-        var eye = new Kinetic.Circle({
-            x: x,
-            y: y,
-            radius: radius,
-            fill: color
-        });
-
-        layer.add(eye)
-    };
-    drawJumpingNinja = function () {
+    function drawJumpingNinja() {
         drawNinjaPart(cloak, 'yellowgreen', 'yellowgreen', 0.2);
         drawNinjaPart(arm, 'yellowgreen', 'black', 0.4)
         drawNinjaPart(body, 'yellowgreen', 'black', 0.5);
@@ -427,8 +453,7 @@ window.onload = function () {
         drawLine(rightEyebrow, 'black', 3);
         drawEye(startX + 73, startY + 48, 5, 'black');
         drawEye(startX + 100, startY + 34, 4, 'black');
-        return stage.add(layer);
-    };
+    }
 
     function drawLandscape() {
         drawSky();
@@ -443,13 +468,12 @@ window.onload = function () {
         drawDownStairs(screenStart, screenEnd);
         drawGround();
         drawText(screenStart, screenEnd);
-        hero.draw(heroX, heroY);
-        drawJumpingNinja();
+        ninja.draw();
     }
 
     var stage,
         layer,
-        heroLayer,
+        ninjaLayer,
         CONSTANTS = {
             MAP_START: 0,
             MAP_END: 12000,
@@ -459,6 +483,7 @@ window.onload = function () {
             GROUND_CELL_WIDTH: 50,
             GROUND_CELL_HEIGHT: 50,
             GROUND_HEIGHT: 400,
+            TEXT_HEIGHT : 200, //TODO: 200
             FIRST_RAW_BRICK_HEIGHT: 200,
             INITIAL_BIG_DARK_BUSHES_COORDINATES: [0, 49, 97, 147, 208],
             INITIAL_SMALL_DARK_BUSHES_COORDINATES: [17, 65, 113, 172],
@@ -469,7 +494,7 @@ window.onload = function () {
             INITIAL_REGULAR_BRICKS_COORDINATES: [21, 23, 25, 65, 69, 88, 90, 95, 101, 102, 119, 132, 133, 160, 161, 162, 163, 164, 167, 168, 183, 185],
             INITIAL_UPSTAIRS_COORDINATES: [137, 200],
             INITIAL_DOWNSTAIRS_COORDINATES: [143, 206],
-            INITIAL_TEXT_COORDINATES: [17],
+            INITIAL_TEXT_COORDINATES: [17, 22, 24, 66, 67, 68, 89, 107, 110, 113, 131, 134, 157, 158, 159, 165, 166, 182, 184, 186],
             NINJA_START_X: 250,
             NINJA_START_Y: 260
         },
@@ -487,7 +512,6 @@ window.onload = function () {
         screenEnd = screenStart + CONSTANTS.SCREEN_WIDTH,
         startX = CONSTANTS.NINJA_START_X,
         startY = CONSTANTS.NINJA_START_Y,
-
         cloak = [
             startX, startY + 92,
             startX + 20, startY + 90,
@@ -556,15 +580,15 @@ window.onload = function () {
             startX + 82, startY + 17
         ],
         leftEyebrow = [
-             startX + 61, startY + 46,
+            startX + 61, startY + 46,
             startX + 79, startY + 44,
         ],
         rightEyebrow = [
             startX + 95, startY + 36,
             startX + 102, startY + 25,
-        ]
-    heroX = 250,
-    heroY = 300;
+        ],
+        ninjaX = 250,
+        ninjaY = 300;
 
     stage = new Kinetic.Stage({
         container: 'container',
@@ -572,45 +596,52 @@ window.onload = function () {
         height: CONSTANTS.MAP_HEIGHT,
         fill: 'lightblue'
     });
-    layer = new Kinetic.Layer();
-    heroLayer = new Kinetic.Layer();
 
-    var hero = {
-        top: 300,
-        right: 300,
+    layer = new Kinetic.Layer();
+    ninjaLayer = new Kinetic.Layer();
+
+    var ninja = {
+        top: 250,
+        right: 400,
         bottom: 400,
         left: 250,
-        draw: function (left, top) {
-            var h = new Kinetic.Rect({
-                x: left,
-                y: top,
-                width: 50,
-                height: 100,
-                stroke: 'yellow',
-                fill: 'orange',
-                strokeWidth: 2
-            });
-            layer.add(h);
+        draw: function () {
+            return drawJumpingNinja();
         }
     };
 
+    var event = new CustomEvent('collectCoin');
+
+    document.body.addEventListener('collectCoin', function() {
+        console.log('Coin collected!!!');
+    });
+
     document.body.addEventListener('keydown', function (ev) {
-        var update;
+        var update = 0;
 
         switch (ev.keyCode) {
             case 37:
-                update = 1;
+                if (!checkForLeftCollision()) {
+                    update = 1;
+                }
                 break; // left
             case 39:
-                update = -1;
+                if (!checkForRightCollision()) {
+                    update = -1;
+                }
                 break; // right
         }
 
-        console.log('Clicked');
-        layer = new Kinetic.Layer();
-        calculateNewCoordinates(update);
-        drawLandscape();
-        return stage.add(layer);
+        if (!!update) {
+            layer = new Kinetic.Layer();
+            calculateNewCoordinates(update);
+            if (checkIfNinjaIsOnBonusCode()) {
+                document.body.dispatchEvent(event);
+            }
+
+            drawLandscape();
+            return stage.add(layer);
+        }
     });
 
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
@@ -619,7 +650,7 @@ window.onload = function () {
     //TODO: Create second layer
     //TODO: Create svg for statistics
     //TODO: Arrays with coordinates of objects
-    //TODO: Hero object
+    //TODO: ninja object
     //TODO: Events for keyboard arrows
     //TODO: Implement bonusJS for special bricks
 
