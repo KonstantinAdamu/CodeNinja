@@ -4,20 +4,29 @@
     <meta charset="UTF-8">
     <title></title>
     <style>
-        body{
+        body {
             padding: 50px;
         }
+
         #container {
 
+        }
+
+        #scoreBoardSvg {
+            position: absolute;
+            left: 100px;
+            top: 70px;
+            z-index: 2;
         }
     </style>
     <script src="bower_components/kineticjs/kinetic.js"></script>
 
 </head>
 <body>
-    <div id="container"></div>
-    <script src="code-ninja.js"></script>
 
+<div id="container"></div>
+<script src="code-ninja.js"></script>
+<svg width="1150" height="120" id="scoreBoardSvg"></svg>
 
 </body>
 </html>
