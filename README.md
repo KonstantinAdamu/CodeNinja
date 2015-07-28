@@ -1,4 +1,4 @@
-# CodeNinja
+﻿# CodeNinja
 An exciting game dedicated to all Telerik Ninjas (JS UI Paradise team)
 
 
@@ -10,7 +10,7 @@ An exciting game dedicated to all Telerik Ninjas (JS UI Paradise team)
 - Implement a function to save high score to file
 
 Penging Tasks:
-- Draw Hero - Dushka
+
 - Draw BGCoder on SVG - Hristian /Roosevelt/
 - Implement addEventListener for collected bonus codes - Hristian /Roosevelt/
 - Implement jumping animation of hero - Jenny
@@ -21,6 +21,7 @@ Penging Tasks:
 - Add enemies - Venci /Buro/
 - Implement enemies to throw exceptions to hero - Venci /Buro/
 - Draw start menu, start/rules/quit buttons - Konstantin /Mbyte/
+- Add some music - optional  -Dushka
 
 ###JavaScript DOM & UI: Teamwork Assignment
 *****************************************
