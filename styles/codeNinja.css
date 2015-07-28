@@ -1,0 +1,17 @@
+body {
+    padding: 50px;
+    background: #9CDE23 url(../images/background-image.jpg) repeat-x;
+}
+
+#container {
+    border: 5px solid darkgreen;
+    width: 1200px;
+    height: 500px;
+}
+
+#scoreBoardSvg {
+    position: absolute;
+    left: 100px;
+    top: 70px;
+    z-index: 2;
+}
