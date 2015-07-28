@@ -384,7 +384,7 @@ window.onload = function () {
             fill: color
         });
 
-        layer.add(eye)
+        layer.add(eye);
     }
 
     function calculateNewCoordinates(updateX) {
@@ -418,8 +418,34 @@ window.onload = function () {
         textInScreenCoordinates = textInScreenCoordinates.map(function (itemX) {
             return itemX + updateX;
         });
-    }
 
+
+    }
+    function calculateNinjaNewCoordinates() {
+        function mapCoord (item, index) {
+                if(index%2 === 0){
+                    return item + startX;
+                } else {
+                    return item + startY;
+                }
+        }
+        newSword = sword.map(mapCoord);
+        console.log(newSword);
+        newSwordDecoration = swordDecoration.map(mapCoord);
+        newFaceWalkingNinja = faceWalkingNinja.map(mapCoord);
+        newBodyWalkingNinja = bodyWalkingNinja.map(mapCoord);
+        newLogoWalkingNinja = logoWalkingNinja.map(mapCoord);
+        newLeftEyebrowWalkingNinja = leftEyebrowWalkingNinja.map(mapCoord);
+        newRightEyebrowWalkingNinja = rightEyebrowWalkingNinja.map(mapCoord);
+        newCloak = cloak.map(mapCoord);
+        newHeadJumpingNinja = headJumpingNinja.map(mapCoord);
+        newFaceJumpingNinja = faceJumpingNinja.map(mapCoord);
+        newBodyJumpingNinja = bodyJumpingNinja.map(mapCoord);
+        newArmJumpingNinja = armJumpingNinja.map(mapCoord);
+        newLogoJumpingNinja = logoJumpingNinja.map(mapCoord);
+        newLeftEyebrowJumpingNinja = leftEyebrowJumpingNinja.map(mapCoord);
+        newRightEyebrowJumpingNinja = rightEyebrowJumpingNinja.map(mapCoord);
+    }
     function checkIfNinjaIsOnBonusCode() {
         return textInScreenCoordinates.some(function (coord) {
             return ninja.left / 50 === coord && ninja.bottom === CONSTANTS.FIRST_RAW_BRICK_HEIGHT;
@@ -443,27 +469,30 @@ window.onload = function () {
     }
 
     function drawWalkingNinja() {
-        drawNinjaPart(bodyWalkingNinja, 'yellowgreen', 'black', 0.5);
-        drawNinjaPart(faceWalkingNinja, 'black', 'white', 0.4);
-        drawLine(logoWalkingNinja, 'yellowgreen', 2);
-        drawLine(leftEyebrowWalkingNinja, 'black', 3);
-        drawLine(rightEyebrowWalkingNinja, 'black', 3);
+        calculateNinjaNewCoordinates();
+        drawNinjaPart(newBodyWalkingNinja, 'yellowgreen', 'black', 0.5);
+        drawNinjaPart(newFaceWalkingNinja, 'black', 'white', 0.4);
+        drawLine(newLogoWalkingNinja, 'yellowgreen', 2);
+        drawLine(newLeftEyebrowWalkingNinja, 'black', 3);
+        drawLine(newRightEyebrowWalkingNinja, 'black', 3);
         drawEye(startX + 73 + CONSTANTS.DELTA_X_HEAD, startY + 48, 5, 'black');
         drawEye(startX + 100 + CONSTANTS.DELTA_X_HEAD, startY + 34, 4, 'black');
-        drawNinjaPart(sword, 'yellowgreen', 'white', 0.8)
-        drawNinjaPart(swordDecoration, 'white', 'black', 0)
+
+        drawNinjaPart(newSword, 'yellowgreen', 'white', 0.8);
+        drawNinjaPart(newSwordDecoration, 'white', 'black', 0);
         return stage.add(layer);
-    };
+    }
 
     function drawJumpingNinja() {
-        drawNinjaPart(cloak, 'yellowgreen', 'yellowgreen', 0.2);
-        drawNinjaPart(armJumpingNinja, 'yellowgreen', 'black', 0.4)
-        drawNinjaPart(bodyJumpingNinja, 'yellowgreen', 'black', 0.5);
-        drawNinjaPart(headJumpingNinja, 'yellowgreen', 'black', 0.4);
-        drawNinjaPart(faceJumpingNinja, 'black', 'white', 0.4);
-        drawLine(logoJumpingNinja, 'yellowgreen', 2);
-        drawLine(leftEyebrowJumpingNinja, 'black', 3);
-        drawLine(rightEyebrowJumpingNinja, 'black', 3);
+        calculateNinjaNewCoordinates();
+        drawNinjaPart(newCloak, 'yellowgreen', 'yellowgreen', 0.2);
+        drawNinjaPart(newArmJumpingNinja, 'yellowgreen', 'black', 0.4)
+        drawNinjaPart(newBodyJumpingNinja, 'yellowgreen', 'black', 0.5);
+        drawNinjaPart(newHeadJumpingNinja, 'yellowgreen', 'black', 0.4);
+        drawNinjaPart(newFaceJumpingNinja, 'black', 'white', 0.4);
+        drawLine(newLogoJumpingNinja, 'yellowgreen', 2);
+        drawLine(newLeftEyebrowJumpingNinja, 'black', 3);
+        drawLine(newRightEyebrowJumpingNinja, 'black', 3);
         drawEye(startX + 73, startY + 48, 5, 'black');
         drawEye(startX + 100, startY + 34, 4, 'black');
     }
@@ -482,7 +511,7 @@ window.onload = function () {
         drawGround();
         drawText(screenStart, screenEnd);
         ninja.jump();
-        ninja.walk();
+        //ninja.walk();
     }
 
     var stage,
@@ -530,176 +559,170 @@ window.onload = function () {
         startY = CONSTANTS.NINJA_START_Y,
 
         sword = [
-           startX + 110, startY + 109,
-           startX + 128, startY + 113,
-           startX + 132, startY + 129,
+           110, 109,
+           128, 113,
+           132, 129
         ],
-    swordDecoration = [
-        startX + 128 - 4, startY + 115,
-        startX + 150, startY + 50,
-        startX + 151, startY + 71
-    ],
-    faceWalkingNinja = [
-        startX + 52 + CONSTANTS.DELTA_X_HEAD, startY + 39,
-        startX + 85 + CONSTANTS.DELTA_X_HEAD, startY + 36,
-        startX + 100 + CONSTANTS.DELTA_X_HEAD, startY + 18,
-        startX + 100 + CONSTANTS.DELTA_X_HEAD, startY + 18,
-        startX + 111 + CONSTANTS.DELTA_X_HEAD, startY + 27,
-        startX + 111 + CONSTANTS.DELTA_X_HEAD, startY + 35,
-        startX + 102 + CONSTANTS.DELTA_X_HEAD, startY + 42,
-        startX + 87 + CONSTANTS.DELTA_X_HEAD, startY + 45,
-        startX + 87 + CONSTANTS.DELTA_X_HEAD, startY + 42,
-        startX + 87 + CONSTANTS.DELTA_X_HEAD, startY + 45,
-        startX + 77 + CONSTANTS.DELTA_X_HEAD, startY + 58,
-        startX + 67 + CONSTANTS.DELTA_X_HEAD, startY + 61,
-        startX + 60 + CONSTANTS.DELTA_X_HEAD, startY + 60,
-        startX + 52 + CONSTANTS.DELTA_X_HEAD, startY + 47,
-        startX + 52 + CONSTANTS.DELTA_X_HEAD, startY + 39,
-    ],
-    bodyWalkingNinja = [
-        startX + 10, startY + 128,
-        startX + 50, startY + 88,
-        startX + 71, startY + 68,//glava
-        startX + 74, startY + 67,
-        startX + 56 + CONSTANTS.DELTA_X_HEAD, startY + 65,
-        startX + 34 + CONSTANTS.DELTA_X_HEAD, startY + 44,
-        startX + 45 + CONSTANTS.DELTA_X_HEAD, startY + 12,
-        startX + 60 + CONSTANTS.DELTA_X_HEAD, startY + 8,
-        startX + 58 + CONSTANTS.DELTA_X_HEAD, startY + 17,
-        startX + 58 + CONSTANTS.DELTA_X_HEAD, startY + 17,
-        startX + 85 + CONSTANTS.DELTA_X_HEAD, startY + 10,
-        startX + 115 + CONSTANTS.DELTA_X_HEAD, startY + 21,
-        startX + 122 + CONSTANTS.DELTA_X_HEAD, startY + 42,
-        startX + 100 + CONSTANTS.DELTA_X_HEAD, startY + 65,
-        startX + 100 + CONSTANTS.DELTA_X_HEAD, startY + 65,
-        startX + 122, startY + 105,
-        startX + 122, startY + 105,
-        startX + 112, startY + 115,
-        startX + 103, startY + 99,//mishnica
-        startX + 103, startY + 99,
-        startX + 96, startY + 108,
-        startX + 96, startY + 108,
-        startX + 115, startY + 115,
-        startX + 115, startY + 115,
-        startX + 150, startY + 30,
-        startX + 160, startY + 70,
-        startX + 110, startY + 143,
-        startX + 100, startY + 143,
-        startX + 115, startY + 115,
-        startX + 105, startY + 128,
-        startX + 105, startY + 128,
-        startX + 85, startY + 120,
-        startX + 85, startY + 120,
-        startX + 58, startY + 143,
-        startX + 45, startY + 141,
-        startX + 55, startY + 118,
-        startX + 55, startY + 118,
-        startX + 20, startY + 137
-    ],
-    logoWalkingNinja = [
-        startX + 68 + CONSTANTS.DELTA_X_HEAD, startY + 30,
-        startX + 68 + CONSTANTS.DELTA_X_HEAD, startY + 25,
-        startX + 85 + CONSTANTS.DELTA_X_HEAD, startY + 25,
-        startX + 85 + CONSTANTS.DELTA_X_HEAD, startY + 32,
-        startX + 77 + CONSTANTS.DELTA_X_HEAD, startY + 32,
-        startX + 77 + CONSTANTS.DELTA_X_HEAD, startY + 17,
-        startX + 82 + CONSTANTS.DELTA_X_HEAD, startY + 17
-    ],
-    leftEyebrowWalkingNinja = [
-         startX + 61 + CONSTANTS.DELTA_X_HEAD, startY + 46,
-    startX + 79 + CONSTANTS.DELTA_X_HEAD, startY + 44,
-    ],
-    rightEyebrowWalkingNinja = [
-         startX + 95 + CONSTANTS.DELTA_X_HEAD, startY + 36,
-    startX + 102 + CONSTANTS.DELTA_X_HEAD, startY + 25,
-    ],
-    sword = [
-       startX + 110, startY + 109,
-       startX + 128, startY + 113,
-       startX + 132, startY + 129,
-    ],
-    swordDecoration = [
-        startX + 128 - 4, startY + 115,
-        startX + 150, startY + 50,
-        startX + 151, startY + 71
-    ];
-    cloak = [
-        startX, startY + 92,
-        startX + 20, startY + 90,
-        startX + 39, startY + 106,
-        startX + 105, startY + 108,
-        startX + 95, startY + 80,
-        startX + 95, startY + 58
-    ],
-    headJumpingNinja = [
-        startX + 56, startY + 75,
-        startX + 34, startY + 44,
-        startX + 45, startY + 7,
-        startX + 58, startY + 10,
-        startX + 110, startY + 11,
-        startX + 122, startY + 32,
-        startX + 100, startY + 60
-    ],
-    faceJumpingNinja = [
-        startX + 52, startY + 39,
-        startX + 85, startY + 36,
-        startX + 100, startY + 18,
-        startX + 100, startY + 18,
-        startX + 111, startY + 27,
-        startX + 111, startY + 35,
-        startX + 102, startY + 42,
-        startX + 87, startY + 45,
-        startX + 87, startY + 42,
-        startX + 87, startY + 45,
-        startX + 77, startY + 58,
-        startX + 67, startY + 61,
-        startX + 60, startY + 60,
-        startX + 52, startY + 47,
-        startX + 52, startY + 39,
-    ],
-    bodyJumpingNinja = [
-        startX + 20, startY + 128,
-        startX + 65, startY + 75,
-        startX + 95, startY + 62,
-        startX + 140, startY + 37,
-        startX + 146, startY + 41,
-        startX + 142, startY + 50,
-        startX + 100, startY + 73,
-        startX + 100, startY + 73,
-        startX + 90, startY + 100,
-        startX + 63, startY + 138,
-        startX + 45, startY + 138,
-        startX + 57, startY + 120,
-        startX + 57, startY + 115,
-        startX + 41, startY + 125,
-        startX + 30, startY + 133
-    ],
-    armJumpingNinja = [
-        startX + 70, startY + 72,
-        startX + 20, startY + 90,
-        startX + 18, startY + 95,
-        startX + 24, startY + 98,
-        startX + 65, startY + 85
-    ],
-    logoJumpingNinja = [
-        startX + 68, startY + 30,
-        startX + 68, startY + 25,
-        startX + 85, startY + 25,
-        startX + 85, startY + 32,
-        startX + 77, startY + 32,
-        startX + 77, startY + 17,
-        startX + 82, startY + 17
-    ],
-    leftEyebrowJumpingNinja = [
-        startX + 61, startY + 46,
-        startX + 79, startY + 44,
-    ],
-    rightEyebrowJumpingNinja = [
-        startX + 95, startY + 36,
-        startX + 102, startY + 25,
-    ],
-    ninjaX = 250,
-    ninjaY = 300;
+        swordDecoration = [
+             128 - 4, 115,
+             150,  50,
+             151,  71
+        ],
+        faceWalkingNinja = [
+             52 + CONSTANTS.DELTA_X_HEAD, 39,
+             85 + CONSTANTS.DELTA_X_HEAD, 36,
+             100 + CONSTANTS.DELTA_X_HEAD, 18,
+             100 + CONSTANTS.DELTA_X_HEAD, 18,
+             111 + CONSTANTS.DELTA_X_HEAD, 27,
+             111 + CONSTANTS.DELTA_X_HEAD, 35,
+             102 + CONSTANTS.DELTA_X_HEAD, 42,
+             87 + CONSTANTS.DELTA_X_HEAD, 45,
+             87 + CONSTANTS.DELTA_X_HEAD, 42,
+             87 + CONSTANTS.DELTA_X_HEAD, 45,
+             77 + CONSTANTS.DELTA_X_HEAD, 58,
+             67 + CONSTANTS.DELTA_X_HEAD, 61,
+             60 + CONSTANTS.DELTA_X_HEAD, 60,
+             52 + CONSTANTS.DELTA_X_HEAD, 47,
+             52 + CONSTANTS.DELTA_X_HEAD, 39
+        ],
+        bodyWalkingNinja = [
+            10, 128,
+            50, 88,
+            71, 68,//glava
+            74, 67,
+            56 + CONSTANTS.DELTA_X_HEAD, 65,
+            34 + CONSTANTS.DELTA_X_HEAD, 44,
+            45 + CONSTANTS.DELTA_X_HEAD, 12,
+            60 + CONSTANTS.DELTA_X_HEAD, 8,
+            58 + CONSTANTS.DELTA_X_HEAD, 17,
+            58 + CONSTANTS.DELTA_X_HEAD, 17,
+            85 + CONSTANTS.DELTA_X_HEAD, 10,
+            115 + CONSTANTS.DELTA_X_HEAD, 21,
+            122 + CONSTANTS.DELTA_X_HEAD, 42,
+            100 + CONSTANTS.DELTA_X_HEAD, 65,
+            100 + CONSTANTS.DELTA_X_HEAD, 65,
+            122, 105,
+            122, 105,
+            112, 115,
+            103, 99,//mishnica
+            103, 99,
+            96, 108,
+            96, 108,
+            115, 115,
+            115, 115,
+            150, 30,
+            160, 70,
+            110, 143,
+            100, 143,
+            115, 115,
+            105, 128,
+            105, 128,
+            85, 120,
+            85, 120,
+            58, 143,
+            45, 141,
+            55, 118,
+            55, 118,
+            20, 137
+        ],
+        logoWalkingNinja = [
+            68 + CONSTANTS.DELTA_X_HEAD, 30,
+            68 + CONSTANTS.DELTA_X_HEAD, 25,
+            85 + CONSTANTS.DELTA_X_HEAD, 25,
+            85 + CONSTANTS.DELTA_X_HEAD, 32,
+            77 + CONSTANTS.DELTA_X_HEAD, 32,
+            77 + CONSTANTS.DELTA_X_HEAD, 17,
+            82 + CONSTANTS.DELTA_X_HEAD, 17
+        ],
+        leftEyebrowWalkingNinja = [
+             61 + CONSTANTS.DELTA_X_HEAD, 46,
+             79 + CONSTANTS.DELTA_X_HEAD, 44
+        ],
+        rightEyebrowWalkingNinja = [
+             95 + CONSTANTS.DELTA_X_HEAD, 36,
+             102 + CONSTANTS.DELTA_X_HEAD, 25
+        ],
+        cloak = [
+            0,  92,
+            20, 90,
+            39, 106,
+            105, 108,
+            95, 80,
+            95, 58
+        ],
+        headJumpingNinja = [
+            56, 75,
+            34, 44,
+            45, 7,
+            58, 10,
+            110, 11,
+            122, 32,
+            100, 60
+        ],
+        faceJumpingNinja = [
+            52, 39,
+            85, 36,
+            100, 18,
+            100, 18,
+            111, 27,
+            111, 35,
+            102, 42,
+            87, 45,
+            87, 42,
+            87, 45,
+            77, 58,
+            67, 61,
+            60, 60,
+            52, 47,
+            52, 39,
+        ],
+        bodyJumpingNinja = [
+            20, 128,
+            65, 75,
+            95, 62,
+            140, 37,
+            146, 41,
+            142, 50,
+            100, 73,
+            100, 73,
+            90, 100,
+            63, 138,
+            45, 138,
+            57, 120,
+            57, 115,
+            41, 125,
+            30, 133
+        ],
+        armJumpingNinja = [
+            70, 72,
+            20, 90,
+            18, 95,
+            24, 98,
+            65, 85
+        ],
+        logoJumpingNinja = [
+            68, 30,
+            68, 25,
+            85, 25,
+            85, 32,
+            77, 32,
+            77, 17,
+            82, 17
+        ],
+        leftEyebrowJumpingNinja = [
+            61, 46,
+            79, 44
+        ],
+        rightEyebrowJumpingNinja = [
+            95, 36,
+            102, 25
+        ],
+        ninjaX = 250,
+        ninjaY = 300,
+            newSword,newSwordDecoration,newFaceWalkingNinja,newBodyWalkingNinja,newLogoWalkingNinja,
+        newLeftEyebrowWalkingNinja, newRightEyebrowWalkingNinja, newCloak, newHeadJumpingNinja,
+        newFaceJumpingNinja, newBodyJumpingNinja, newArmJumpingNinja, newLogoJumpingNinja,
+        newLeftEyebrowJumpingNinja, newRightEyebrowJumpingNinja;
 
     stage = new Kinetic.Stage({
         container: 'container',
@@ -732,16 +755,25 @@ window.onload = function () {
 
     document.body.addEventListener('keydown', function (ev) {
         var update = 0;
-
+        console.log(ev.keyCode);
         switch (ev.keyCode) {
             case 37:
+                startX = startX - 50;
                 if (!checkForLeftCollision()) {
-                    update = 1;
+                    update = 7;
                 }
                 break; // left
+            //case 38:
+            //    startY -= 50;
+            //    break;
+            //case 40:
+            //    startY += 50;
+            //    break;
             case 39:
+                startX = startX + 50;
+
                 if (!checkForRightCollision()) {
-                    update = -1;
+                    update = -7;
                 }
                 break; // right
         }
@@ -754,6 +786,8 @@ window.onload = function () {
             }
 
             drawLandscape();
+            //ninja.walk();
+            //stage.add(layer)
             return stage.add(layer);
         }
     });
