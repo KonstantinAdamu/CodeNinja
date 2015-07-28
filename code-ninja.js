@@ -363,7 +363,7 @@ window.onload = function () {
             closed: true
         });
 
-        layer.add(jumpingNinja);
+        ninjaLayer.add(jumpingNinja);
     }
 
     function drawLine(points, strokeColor, width) {
@@ -373,7 +373,7 @@ window.onload = function () {
             strokeWidth: width,
         });
 
-        layer.add(line);
+        ninjaLayer.add(line);
     }
 
     function drawEye(x, y, radius, color) {
@@ -384,7 +384,7 @@ window.onload = function () {
             fill: color
         });
 
-        layer.add(eye);
+        ninjaLayer.add(eye);
     }
 
     function calculateNewCoordinates(updateX) {
@@ -469,7 +469,7 @@ window.onload = function () {
     }
 
     function drawWalkingNinja() {
-        calculateNinjaNewCoordinates();
+        //calculateNinjaNewCoordinates();
         drawNinjaPart(newBodyWalkingNinja, 'yellowgreen', 'black', 0.5);
         drawNinjaPart(newFaceWalkingNinja, 'black', 'white', 0.4);
         drawLine(newLogoWalkingNinja, 'yellowgreen', 2);
@@ -480,13 +480,14 @@ window.onload = function () {
 
         drawNinjaPart(newSword, 'yellowgreen', 'white', 0.8);
         drawNinjaPart(newSwordDecoration, 'white', 'black', 0);
-        return stage.add(layer);
+        //layer.add(ninjaLayer);
+        return stage.add(ninjaLayer);
     }
 
     function drawJumpingNinja() {
-        calculateNinjaNewCoordinates();
+        //calculateNinjaNewCoordinates();
         drawNinjaPart(newCloak, 'yellowgreen', 'yellowgreen', 0.2);
-        drawNinjaPart(newArmJumpingNinja, 'yellowgreen', 'black', 0.4)
+        drawNinjaPart(newArmJumpingNinja, 'yellowgreen', 'black', 0.4);
         drawNinjaPart(newBodyJumpingNinja, 'yellowgreen', 'black', 0.5);
         drawNinjaPart(newHeadJumpingNinja, 'yellowgreen', 'black', 0.4);
         drawNinjaPart(newFaceJumpingNinja, 'black', 'white', 0.4);
@@ -495,6 +496,7 @@ window.onload = function () {
         drawLine(newRightEyebrowJumpingNinja, 'black', 3);
         drawEye(startX + 73, startY + 48, 5, 'black');
         drawEye(startX + 100, startY + 34, 4, 'black');
+        return stage.add(ninjaLayer);
     }
 
     function drawLandscape() {
@@ -510,7 +512,7 @@ window.onload = function () {
         drawDownStairs(screenStart, screenEnd);
         drawGround();
         drawText(screenStart, screenEnd);
-        ninja.jump();
+        //ninja.jump();
         //ninja.walk();
     }
 
@@ -755,40 +757,58 @@ window.onload = function () {
 
     document.body.addEventListener('keydown', function (ev) {
         var update = 0;
+        var updateNinja = 0;
         console.log(ev.keyCode);
         switch (ev.keyCode) {
             case 37:
-                startX = startX - 50;
+                //startX = startX - 50;
                 if (!checkForLeftCollision()) {
-                    update = 7;
+                    update = 1;
                 }
                 break; // left
-            //case 38:
-            //    startY -= 50;
-            //    break;
-            //case 40:
-            //    startY += 50;
-            //    break;
+            case 38:
+                updateNinja = -1 * 50;
+                //ninja.jump();
+                break;
+            case 40:
+                updateNinja = +50;
+                //ninja.jump();
+                break;
             case 39:
-                startX = startX + 50;
+                //startX = startX + 50;
 
                 if (!checkForRightCollision()) {
-                    update = -7;
+                    update = -1;
                 }
                 break; // right
         }
 
         if (!!update) {
             layer = new Kinetic.Layer();
+
             calculateNewCoordinates(update);
+            calculateNinjaNewCoordinates();
             if (checkIfNinjaIsOnBonusCode()) {
                 document.body.dispatchEvent(event);
             }
 
             drawLandscape();
-            //ninja.walk();
+            stage.add(layer);
+            ninjaLayer = new Kinetic.Layer();
             //stage.add(layer)
-            return stage.add(layer);
+
+            ninja.walk();
+            return stage.add(ninjaLayer);
+        }
+        if(!!updateNinja) {
+            layer = new Kinetic.Layer();
+            drawLandscape();
+            stage.add(layer);
+            ninjaLayer = new Kinetic.Layer();
+            startY += updateNinja;
+            calculateNinjaNewCoordinates();
+            ninja.jump();
+            return stage.add(ninjaLayer);
         }
     });
 
@@ -891,10 +911,14 @@ window.onload = function () {
 
     function anim() {
         layer = new Kinetic.Layer();
+        ninjaLayer = new Kinetic.Layer();
+        calculateNinjaNewCoordinates();
         drawLandscape();
         drawScoreBoard();
         //setTimeout(anim, 10);
-        return stage.add(layer);
+        ninja.walk();
+        stage.add(layer);
+        return stage.add(ninjaLayer);
     }
 
     anim();
