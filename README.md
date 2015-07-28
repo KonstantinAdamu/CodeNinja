@@ -1,28 +1,26 @@
-# CodeNinja
+﻿# CodeNinja
 An exciting game dedicated to all Telerik Ninjas (JS UI Paradise team)
 
 
 
 ##Task List:
+ 
+ - Draw flag at the end of level
+-- Draw start menu, start/rules/quit buttons
+ - Add rules
++- Implement a function to save high score to file
+ 
+ Penging Tasks:
 
-- Draw flag at the end of level
-- Draw start menu, start/rules/quit buttons
-- Add rules
+ @@ -20,6 +20,7 @@ Penging Tasks:
+ - Add custom event when hero is on bonus code - Kalin
+ - Add enemies - Venci /Buro/
+ - Implement enemies to throw exceptions to hero - Venci /Buro/
++- Draw start menu, start/rules/quit buttons - Konstantin /Mbyte/
 
-Penging Tasks:
-- Draw Hero - Dushka
-- Draw BGCoder on SVG - Hristian /Roosevelt/
-- Implement addEventListener for collected bonus codes - Hristian /Roosevelt/
-- Implement jumping animation of hero - Jenny
-- Implement functions to check for collision with another objects when hero is jumping - Jenny
-- Implement function to check for collision with another objects when hero is walking - Jenny
-- Add bonus codes - Kalin
-- Add custom event when hero is on bonus code - Kalin
-- Add enemies - Venci /Buro/
-- Implement enemies to throw exceptions to hero - Venci /Buro/
-
-###JavaScript DOM & UI: Teamwork Assignment
-*****************************************
+ 
+ ###JavaScript DOM & UI: Teamwork Assignment
+ *****************************************
 This document describes the teamwork assignment for Telerik Academy students in JavaScript
 UI & DOM course
 
