@@ -870,8 +870,8 @@ window.onload = function () {
             scoreCounterXCoord = 961,
             CONSTANTS = {
                 SCORECOUNTER_Y_COORD: 37,
-                TOTALPOINTS_X_COORD: 1020,
-                TOTALPOINTS_Y_COORD: 37,
+                MAXIMUM_SCORE_X_COORD: 1020,
+                MAXIMUM_SCORE_Y_COORD: 37,
                 MAXIMUM_SCORE_POINTS: 100
             };
 
@@ -937,7 +937,7 @@ window.onload = function () {
 
         containerForScoreBoardNodes = document.createDocumentFragment();
         containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, +score));
-        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.TOTALPOINTS_X_COORD, CONSTANTS.TOTALPOINTS_Y_COORD, '100'));
+        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.MAXIMUM_SCORE_X_COORD, CONSTANTS.MAXIMUM_SCORE_Y_COORD, '100'));
         containerForScoreBoardNodes.appendChild(drawScoreBoardForwardSlash());
 
         // TODO: implement functionality;
