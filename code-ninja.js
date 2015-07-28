@@ -421,14 +421,16 @@ window.onload = function () {
 
 
     }
+
     function calculateNinjaNewCoordinates() {
-        function mapCoord (item, index) {
-                if(index%2 === 0){
-                    return item + startX;
-                } else {
-                    return item + startY;
-                }
+        function mapCoord(item, index) {
+            if (index % 2 === 0) {
+                return item + startX;
+            } else {
+                return item + startY;
+            }
         }
+
         newSword = sword.map(mapCoord);
         console.log(newSword);
         newSwordDecoration = swordDecoration.map(mapCoord);
@@ -446,6 +448,7 @@ window.onload = function () {
         newLeftEyebrowJumpingNinja = leftEyebrowJumpingNinja.map(mapCoord);
         newRightEyebrowJumpingNinja = rightEyebrowJumpingNinja.map(mapCoord);
     }
+
     function checkIfNinjaIsOnBonusCode() {
         return textInScreenCoordinates.some(function (coord) {
             return ninja.left / 50 === coord && ninja.bottom === CONSTANTS.FIRST_RAW_BRICK_HEIGHT;
@@ -562,31 +565,31 @@ window.onload = function () {
         startY = CONSTANTS.NINJA_START_Y,
 
         sword = [
-           110, 109,
-           128, 113,
-           132, 129
+            110, 109,
+            128, 113,
+            132, 129
         ],
         swordDecoration = [
-             128 - 4, 115,
-             150,  50,
-             151,  71
+            128 - 4, 115,
+            150, 50,
+            151, 71
         ],
         faceWalkingNinja = [
-             52 + CONSTANTS.DELTA_X_HEAD, 39,
-             85 + CONSTANTS.DELTA_X_HEAD, 36,
-             100 + CONSTANTS.DELTA_X_HEAD, 18,
-             100 + CONSTANTS.DELTA_X_HEAD, 18,
-             111 + CONSTANTS.DELTA_X_HEAD, 27,
-             111 + CONSTANTS.DELTA_X_HEAD, 35,
-             102 + CONSTANTS.DELTA_X_HEAD, 42,
-             87 + CONSTANTS.DELTA_X_HEAD, 45,
-             87 + CONSTANTS.DELTA_X_HEAD, 42,
-             87 + CONSTANTS.DELTA_X_HEAD, 45,
-             77 + CONSTANTS.DELTA_X_HEAD, 58,
-             67 + CONSTANTS.DELTA_X_HEAD, 61,
-             60 + CONSTANTS.DELTA_X_HEAD, 60,
-             52 + CONSTANTS.DELTA_X_HEAD, 47,
-             52 + CONSTANTS.DELTA_X_HEAD, 39
+            52 + CONSTANTS.DELTA_X_HEAD, 39,
+            85 + CONSTANTS.DELTA_X_HEAD, 36,
+            100 + CONSTANTS.DELTA_X_HEAD, 18,
+            100 + CONSTANTS.DELTA_X_HEAD, 18,
+            111 + CONSTANTS.DELTA_X_HEAD, 27,
+            111 + CONSTANTS.DELTA_X_HEAD, 35,
+            102 + CONSTANTS.DELTA_X_HEAD, 42,
+            87 + CONSTANTS.DELTA_X_HEAD, 45,
+            87 + CONSTANTS.DELTA_X_HEAD, 42,
+            87 + CONSTANTS.DELTA_X_HEAD, 45,
+            77 + CONSTANTS.DELTA_X_HEAD, 58,
+            67 + CONSTANTS.DELTA_X_HEAD, 61,
+            60 + CONSTANTS.DELTA_X_HEAD, 60,
+            52 + CONSTANTS.DELTA_X_HEAD, 47,
+            52 + CONSTANTS.DELTA_X_HEAD, 39
         ],
         bodyWalkingNinja = [
             10, 128,
@@ -638,15 +641,15 @@ window.onload = function () {
             82 + CONSTANTS.DELTA_X_HEAD, 17
         ],
         leftEyebrowWalkingNinja = [
-             61 + CONSTANTS.DELTA_X_HEAD, 46,
-             79 + CONSTANTS.DELTA_X_HEAD, 44
+            61 + CONSTANTS.DELTA_X_HEAD, 46,
+            79 + CONSTANTS.DELTA_X_HEAD, 44
         ],
         rightEyebrowWalkingNinja = [
-             95 + CONSTANTS.DELTA_X_HEAD, 36,
-             102 + CONSTANTS.DELTA_X_HEAD, 25
+            95 + CONSTANTS.DELTA_X_HEAD, 36,
+            102 + CONSTANTS.DELTA_X_HEAD, 25
         ],
         cloak = [
-            0,  92,
+            0, 92,
             20, 90,
             39, 106,
             105, 108,
@@ -722,7 +725,7 @@ window.onload = function () {
         ],
         ninjaX = 250,
         ninjaY = 300,
-            newSword,newSwordDecoration,newFaceWalkingNinja,newBodyWalkingNinja,newLogoWalkingNinja,
+        newSword, newSwordDecoration, newFaceWalkingNinja, newBodyWalkingNinja, newLogoWalkingNinja,
         newLeftEyebrowWalkingNinja, newRightEyebrowWalkingNinja, newCloak, newHeadJumpingNinja,
         newFaceJumpingNinja, newBodyJumpingNinja, newArmJumpingNinja, newLogoJumpingNinja,
         newLeftEyebrowJumpingNinja, newRightEyebrowJumpingNinja, jumpingShapes, isJumping = false;
@@ -769,9 +772,9 @@ window.onload = function () {
                 break; // left
             case 38:
 
-                if(!isJumping) {
+                if (!isJumping) {
                     updateNinja = -50;
-                 //jumpingShapes = [];
+                    //jumpingShapes = [];
                 }
                 break;
             case 39:
@@ -800,10 +803,10 @@ window.onload = function () {
             ninja.walk();
             return stage.add(ninjaLayer);
         }
-        if(!!updateNinja) {
+        if (!!updateNinja) {
             var originalPos = {
-                x: startX,
-                y: startY
+                    x: startX,
+                    y: startY
                 },
                 updatex = 0,
                 updatey = -25;
@@ -811,13 +814,13 @@ window.onload = function () {
             //    return;
             //}
             //jumpingShapes.push(originalPos);
-            function performJump(){
+            function performJump() {
                 isJumping = true;
                 layer = new Kinetic.Layer();
                 drawLandscape();
                 stage.add(layer);
                 ninjaLayer = new Kinetic.Layer();
-                if(originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT > startY ) {
+                if (originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT > startY) {
                     updatey *= -1;
                 }
 
@@ -828,7 +831,7 @@ window.onload = function () {
                 ninja.jump();
                 stage.add(ninjaLayer);
 
-                if(originalPos.y > startY) {
+                if (originalPos.y > startY) {
 
                     ninjaLayer = new Kinetic.Layer();
                     requestAnimationFrame(performJump);
@@ -862,11 +865,14 @@ window.onload = function () {
         var svgNameSpace,
             drawingBoard,
             containerForScoreBoardNodes,
+            documentBody,
+            score = 0,
+            scoreCounterXCoord = 961,
             CONSTANTS = {
-                SCORECOUNTER_X_COORD: 963,
                 SCORECOUNTER_Y_COORD: 37,
                 TOTALPOINTS_X_COORD: 1020,
-                TOTALPOINTS_Y_COORD: 37
+                TOTALPOINTS_Y_COORD: 37,
+                MAXIMUM_SCORE_POINTS: 100
             };
 
         svgNameSpace = 'http://www.w3.org/2000/svg';
@@ -881,7 +887,7 @@ window.onload = function () {
             scoreBoard.setAttribute('y', y);
             scoreBoard.setAttribute('font-family', 'Arial Black, Gadget, sans-serif');
             scoreBoard.setAttribute('fill', 'white');
-            scoreBoard.setAttribute('stroke-width', '1.3');
+            scoreBoard.setAttribute('stroke-width', '1.2');
             scoreBoard.setAttribute('stroke', 'black');
             scoreBoard.setAttribute('font-size', '32');
             textNode = document.createTextNode(value);
@@ -892,6 +898,7 @@ window.onload = function () {
 
         function drawScoreBoardForwardSlash() {
             var forwardSlash;
+
             forwardSlash = document.createElementNS(svgNameSpace, 'path');
             forwardSlash.setAttribute('d', 'M 992 37 L 1004 37  L 1013 14 L 1001 14 z')
             forwardSlash.setAttribute('fill', 'white');
@@ -900,8 +907,36 @@ window.onload = function () {
             return forwardSlash;
         }
 
+        function calculateScorePointsXCoord(scoreNumber) {
+            var scoreCounterXCoord = 0,
+                stringWithScore = scoreNumber.toString();
+
+            if (stringWithScore.length === 1) {
+                scoreCounterXCoord = 961;
+            }
+            if (stringWithScore.length === 2) {
+                scoreCounterXCoord = 941;
+            }
+            if (stringWithScore.length === 3) {
+                scoreCounterXCoord = 920;
+            }
+
+            return scoreCounterXCoord;
+        }
+
+        documentBody = document.getElementsByTagName('body')[0];
+        documentBody.addEventListener('collectCoin', function () {
+            if (score >= CONSTANTS.MAXIMUM_SCORE_POINTS) {
+                score = CONSTANTS.MAXIMUM_SCORE_POINTS;
+            }
+            else {
+                score += 4;
+            }
+            scoreCounterXCoord = calculateScorePointsXCoord(score);
+        }, false);
+
         containerForScoreBoardNodes = document.createDocumentFragment();
-        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.SCORECOUNTER_X_COORD, CONSTANTS.SCORECOUNTER_Y_COORD, '0'));
+        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, +score));
         containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.TOTALPOINTS_X_COORD, CONSTANTS.TOTALPOINTS_Y_COORD, '100'));
         containerForScoreBoardNodes.appendChild(drawScoreBoardForwardSlash());
 
@@ -932,11 +967,11 @@ window.onload = function () {
             return cross;
         }
 
-        // The variable below contains the initial drawing of the scoreboard - 30 crosses,
+        // The variable below contains the initial drawing of the scoreboard - 25 crosses,
         // should not serve other purposes.
         var initialCrossFragment = document.createDocumentFragment();
 
-        for (var i = 0; i < 30; i += 1) {
+        for (var i = 0; i < 25; i += 1) {
             var cross = insertCross(10 + i * 30, 7);
             initialCrossFragment.appendChild(cross);
         }
@@ -944,7 +979,6 @@ window.onload = function () {
         drawingBoard.appendChild(containerForScoreBoardNodes);
         drawingBoard.appendChild(initialCrossFragment);
     }
-
 
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
     //TODO: Second  raw of bricks
