@@ -542,7 +542,8 @@ window.onload = function () {
             INITIAL_TEXT_COORDINATES: [17, 22, 24, 66, 67, 68, 89, 107, 110, 113, 131, 134, 157, 158, 159, 165, 166, 182, 184, 186],
             NINJA_START_X: 250,
             NINJA_START_Y: 260,
-            DELTA_X_HEAD: 15
+            DELTA_X_HEAD: 15,
+            NINJA_JUMP_HEIGHT: 150
 
         },
         bigDarkBushesInScreenCoordinates = CONSTANTS.INITIAL_BIG_DARK_BUSHES_COORDINATES,
@@ -768,11 +769,7 @@ window.onload = function () {
                 break; // left
             case 38:
                 updateNinja = -1 * 50;
-                //ninja.jump();
-                break;
-            case 40:
-                updateNinja = +50;
-                //ninja.jump();
+
                 break;
             case 39:
                 //startX = startX + 50;
@@ -801,13 +798,44 @@ window.onload = function () {
             return stage.add(ninjaLayer);
         }
         if(!!updateNinja) {
+            var originalPos = {
+                x: startX,
+                y: startY
+                },
+                updatex = 5,
+                updatey = -20;
+
+            function performJump(){
+                layer = new Kinetic.Layer();
+                drawLandscape();
+                stage.add(layer);
+                ninjaLayer = new Kinetic.Layer();
+                if(originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT > startY ) {
+                    updatey *= -1;
+                }
+                startX += updatex;
+                startY += updatey;
+
+                calculateNinjaNewCoordinates();
+
+                ninja.jump();
+                stage.add(ninjaLayer);
+
+                if(originalPos.y > startY) {
+                    ninjaLayer = new Kinetic.Layer();
+                    requestAnimationFrame(performJump);
+                }
+
+            }
+
             layer = new Kinetic.Layer();
             drawLandscape();
             stage.add(layer);
             ninjaLayer = new Kinetic.Layer();
             startY += updateNinja;
-            calculateNinjaNewCoordinates();
-            ninja.jump();
+            performJump();
+            //calculateNinjaNewCoordinates();
+            //ninja.jump();
             return stage.add(ninjaLayer);
         }
     });
