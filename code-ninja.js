@@ -725,7 +725,7 @@ window.onload = function () {
             newSword,newSwordDecoration,newFaceWalkingNinja,newBodyWalkingNinja,newLogoWalkingNinja,
         newLeftEyebrowWalkingNinja, newRightEyebrowWalkingNinja, newCloak, newHeadJumpingNinja,
         newFaceJumpingNinja, newBodyJumpingNinja, newArmJumpingNinja, newLogoJumpingNinja,
-        newLeftEyebrowJumpingNinja, newRightEyebrowJumpingNinja;
+        newLeftEyebrowJumpingNinja, newRightEyebrowJumpingNinja, jumpingShapes, isJumping = false;
 
     stage = new Kinetic.Stage({
         container: 'container',
@@ -768,8 +768,11 @@ window.onload = function () {
                 }
                 break; // left
             case 38:
-                updateNinja = -1 * 50;
 
+                if(!isJumping) {
+                    updateNinja = -50;
+                 //jumpingShapes = [];
+                }
                 break;
             case 39:
                 //startX = startX + 50;
@@ -802,10 +805,14 @@ window.onload = function () {
                 x: startX,
                 y: startY
                 },
-                updatex = 5,
-                updatey = -20;
-
+                updatex = 0,
+                updatey = -25;
+            //if (jumpingShapes.indexOf(originalPos) >= 0) {
+            //    return;
+            //}
+            //jumpingShapes.push(originalPos);
             function performJump(){
+                isJumping = true;
                 layer = new Kinetic.Layer();
                 drawLandscape();
                 stage.add(layer);
@@ -813,7 +820,7 @@ window.onload = function () {
                 if(originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT > startY ) {
                     updatey *= -1;
                 }
-                startX += updatex;
+
                 startY += updatey;
 
                 calculateNinjaNewCoordinates();
@@ -822,18 +829,29 @@ window.onload = function () {
                 stage.add(ninjaLayer);
 
                 if(originalPos.y > startY) {
+
                     ninjaLayer = new Kinetic.Layer();
                     requestAnimationFrame(performJump);
+                } else {
+                    //jumpingShapes.splice(
+                    //    jumpingShapes.indexOf(originalPos));
+                    isJumping = false;
                 }
 
             }
 
             layer = new Kinetic.Layer();
+
             drawLandscape();
+
             stage.add(layer);
             ninjaLayer = new Kinetic.Layer();
             startY += updateNinja;
+
+            //isJumping = true;
             performJump();
+            //isJumping = false;
+
             //calculateNinjaNewCoordinates();
             //ninja.jump();
             return stage.add(ninjaLayer);
