@@ -1,4 +1,4 @@
-var Characters = function() {
+//var Characters = function() {
 
     var CONSTANTS = {
         NINJA_START_X: 0,
@@ -83,17 +83,21 @@ var Characters = function() {
             startX + 102, startY + 25,
         ];
 
+
+(function ninja () {
     var tempStage = new Kinetic.Stage({
         container: 'canvas-cont',
-        width: 800,
-        height: 600
+        width: 500,
+        height: 300
     });
+    var layer = new Kinetic.Layer();
 
-    function ninja () {
-        var layer = new Kinetic.Layer();
+
+    //var tempCanvas = document.getElementById("canvas");
+    //var context = tempCanvas.getContext("2d");
 
         layer.add(drawNinjaPart(cloak, 'yellowgreen', 'yellowgreen', 0.2));
-        layer.add(drawNinjaPart(arm, 'yellowgreen', 'black', 0.4))
+        layer.add(drawNinjaPart(arm, 'yellowgreen', 'black', 0.4));
         layer.add(drawNinjaPart(body, 'yellowgreen', 'black', 0.5));
         layer.add(drawNinjaPart(head, 'yellowgreen', 'black', 0.4));
         layer.add(drawNinjaPart(face, 'black', 'white', 0.4));
@@ -104,45 +108,103 @@ var Characters = function() {
         layer.add(drawEye(startX + 100, startY + 34, 4, 'black'));
 
         tempStage.add(layer);
+
+    var ninjaSheet = new Image();
+    var nin;
+    var animations = {
+        stopped: [{
+            x: 0,
+            y: 0,
+            width: 200,
+            height: 300
+        }]
+    };
+    ninjaSheet.onload = function () {
+    nin = new Kinetic.Sprite({
+        x: 200,
+        y: 900,
+        image: ninjaSheet,
+        animations: animations,
+        framerate: 15,
+        index: 0
+    });
+    layer.add(nin);
+
+    nin.setAnimation("stopped");
+    nin.start();
+
+    layer.draw();
+    }
+    ninjaSheet.src = layer.toDataURL();
+
+    }()
+);
+    function drawNinjaPart(points, strokeColor, fillColor, tension) {
+        var jumpingNinja = new Kinetic.Line({
+            points: points,
+            stroke: strokeColor,
+            fill: fillColor,
+            strokeWidth: 4,
+            tension: tension,
+            closed: true
+        });
+
+        return jumpingNinja;
     }
 
-        function drawNinjaPart(points, strokeColor, fillColor, tension) {
-            var jumpingNinja = new Kinetic.Line({
-                points: points,
-                stroke: strokeColor,
-                fill: fillColor,
-                strokeWidth: 4,
-                tension: tension,
-                closed: true
-            });
+    function drawLine(points, strokeColor, width) {
+        var line = new Kinetic.Line({
+            points: points,
+            stroke: strokeColor,
+            strokeWidth: width,
+        });
 
-            return jumpingNinja;
-        }
+        return line;
+    }
 
-        function drawLine(points, strokeColor, width) {
-            var line = new Kinetic.Line({
-                points: points,
-                stroke: strokeColor,
-                strokeWidth: width,
-            });
+    function drawEye(x, y, radius, color) {
+        var eye = new Kinetic.Circle({
+            x: x,
+            y: y,
+            radius: radius,
+            fill: color
+        });
 
-            return line;
-        }
+        return eye;
+    }
+    //var ninjaSheet = new Image();
+    //var nin;
+    //var animations = {
+    //    stopped: [{
+    //        x: 0,
+    //        y: 0,
+    //        width: 200,
+    //        height: 300
+    //    }]
+    //};
+    ////ninjaSheet.onload = function () {
+    //    nin = new Kinetic.Sprite({
+    //        x: 100,
+    //        y: 75,
+    //        image: ninjaSheet,
+    //        animations: animations,
+    //        framerate: 15,
+    //        index: 0
+    //    });
+    //    layer.add(nin);
+    //
+    //    nin.setAnimation("stopped");
+    //    nin.start();
+    //
+    //    layer.draw();
+    ////}
+    //ninjaSheet.src = layer.toDataURL();
 
-        function drawEye(x, y, radius, color) {
-            var eye = new Kinetic.Circle({
-                x: x,
-                y: y,
-                radius: radius,
-                fill: color
-            });
-
-            return eye;
-        }
-
-        var tempCanvas = document.getElementById("canvas");
-        var context = tempCanvas.getContext("2d");
 
 
 
-}();
+
+
+
+
+//}();

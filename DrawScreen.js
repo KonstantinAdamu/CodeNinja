@@ -509,7 +509,7 @@ var DrawScreen = (function () {
         }
 
         function updateMap() {
-            var upd = -10;
+            var upd = 0;
 
             this.layer = new Kinetic.Layer();
             calculateNewCoordinates.call(this,upd);
@@ -535,15 +535,16 @@ var DrawScreen = (function () {
             this.stage.add(this.layer);
             //this.layer.draw();
             updateNinja.call(this);
+
             return this;
 
         }
 
         function updateNinja() {
-            var upd = 10;
+            var upd = 0;
             this.characterLayer = new Kinetic.Layer();
             var newNinja = this.ninja;
-            var newX = newNinja.getX() + 10;
+            var newX = newNinja.getX() + 0;
             newNinja.setX(newX);
             this.characterLayer.add(newNinja);
             //calculateNewCoordinates.call(this,upd);

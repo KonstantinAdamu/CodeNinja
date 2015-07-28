@@ -563,7 +563,7 @@ window.onload = function () {
         rightEyebrow = [
             startX + 95, startY + 36,
             startX + 102, startY + 25,
-        ]
+        ],
     heroX = 250,
     heroY = 300;
 
