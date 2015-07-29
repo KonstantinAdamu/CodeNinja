@@ -1077,7 +1077,7 @@ window.onload = function () {
             cross = document.createElementNS(svgNameSpace, 'image');
             cross.setAttribute('x', x);
             cross.setAttribute('y', y);
-            cross.setAttribute('height', '38');
+            cross.setAttribute('height', '40');
             cross.setAttribute('width', '25');
             cross.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/cross.png');
 
@@ -1102,7 +1102,6 @@ window.onload = function () {
         scoreIconsDrawingBoard.appendChild(initialCrosses);
 
     }
-
 
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
     //TODO: Second  raw of bricks
