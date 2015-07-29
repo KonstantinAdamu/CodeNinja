@@ -1,13 +1,12 @@
 window.onload = function () {
-
     function collides(a, b) {
         return a.x - 50 < b.x + b.width &&
-            a.x + a.width > b.x
-            //&&
-           // a.y < b.y + b.height &&
-            //a.y + a.height > b.y
+            a.x + a.width > b.x &&
+            a.y < b.y + b.height &&
+            a.y + a.height > b.y
             ;
     }
+
     function collidesWithPipesRight(ninja, pipe) {
         var output =  pipe.some(function(item) {
             return collides(ninja, item);
@@ -196,7 +195,7 @@ window.onload = function () {
             startX,
             y = CONSTANTS.GROUND_HEIGHT,
             pipe;
-            pipeShapesArray = [];
+        pipeShapesArray = [];
 
         for (i = 0, len = startingPoints.length; i < len; i += 1) {
             startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
@@ -457,7 +456,6 @@ window.onload = function () {
         }
 
         newSword = sword.map(mapCoord);
-
         newSwordDecoration = swordDecoration.map(mapCoord);
         newFaceWalkingNinja = faceWalkingNinja.map(mapCoord);
         newBodyWalkingNinja = bodyWalkingNinja.map(mapCoord);
@@ -482,7 +480,7 @@ window.onload = function () {
                     right: obj.right + updateX,
                     top: obj.top,
                     updateX: obj.updateX,
-                    draw: function () {
+                    draw: function() {
                         drawSingleEnemy(obj.left + updateX);
                     }
 
@@ -502,7 +500,7 @@ window.onload = function () {
                     currentEnemy.updateX = obj.updateX;
                 }
 
-                currentEnemy.draw = function () {
+                currentEnemy.draw = function() {
                     drawSingleEnemy(obj.left + currentEnemy.updateX);
                 };
                 currentEnemy.left = obj.left + currentEnemy.updateX;
@@ -512,7 +510,7 @@ window.onload = function () {
 
             });
         }
-        //console.log(enemies);
+        console.log(enemies);
 
     }
 
@@ -596,7 +594,7 @@ window.onload = function () {
                 left: enemyCoordinates[i],
                 right: enemyCoordinates[i] + 1,
                 updateX: 1,
-                draw: function () {
+                draw: function() {
                     drawSingleEnemy(this.left);
                 }
 
@@ -620,7 +618,7 @@ window.onload = function () {
         enemiesLayer.add(enemy);
     }
 
-    function drawEnemies(startScreen, endScreen) {
+    function drawEnemies (startScreen, endScreen) {
         var i,
             len,
             enemiesInScreen = enemies.filter(function (item) {
@@ -921,12 +919,9 @@ window.onload = function () {
                 }
                 break;
             case 39:
-                //startX = startX + 50;
-
                 if (!collidesWithPipesRight({x: startX, y: startY, width: 150, height: 150}, pipeShapesArray)) {
                     update = -2;
-                }
-                break; // right
+                } //right
         }
 
         if (!!update) {
@@ -982,8 +977,7 @@ window.onload = function () {
                     ninjaLayer = new Kinetic.Layer();
                     requestAnimationFrame(performJump);
                 } else {
-                    //jumpingShapes.splice(
-                    //    jumpingShapes.indexOf(originalPos));
+
                     isJumping = false;
                 }
 
@@ -1010,23 +1004,20 @@ window.onload = function () {
 
     function drawScoreBoard() {
         var svgNameSpace,
+            drawingBoard,
+            containerForScoreBoardNodes,
             documentBody,
-            scoreIconsDrawingBoard,
-            scoreNumbersDrawingBoard,
-            containerForScoreBoardNumbersNodes,
-            initialCrosses,
             score = 0,
-            scoreCounterXCoord = 61,
+            scoreCounterXCoord = 961,
             CONSTANTS = {
                 SCORECOUNTER_Y_COORD: 37,
-                MAXIMUM_SCORE_X_COORD: 122,
+                MAXIMUM_SCORE_X_COORD: 1020,
                 MAXIMUM_SCORE_Y_COORD: 37,
                 MAXIMUM_SCORE_POINTS: 100
             };
 
         svgNameSpace = 'http://www.w3.org/2000/svg';
-        scoreIconsDrawingBoard = document.getElementById('scoreBoardSvg');
-        scoreNumbersDrawingBoard = document.getElementById('scoreCounterSvg');
+        drawingBoard = document.getElementById('scoreBoardSvg');
 
         function drawScoreBoardNumbers(x, y, value) {
             var scoreBoard,
@@ -1050,7 +1041,7 @@ window.onload = function () {
             var forwardSlash;
 
             forwardSlash = document.createElementNS(svgNameSpace, 'path');
-            forwardSlash.setAttribute('d', 'M 91 37 L 105 37  L 110 14 L 96 14 z')
+            forwardSlash.setAttribute('d', 'M 992 37 L 1004 37  L 1013 14 L 1001 14 z')
             forwardSlash.setAttribute('fill', 'white');
             forwardSlash.setAttribute('stroke', 'black');
 
@@ -1062,13 +1053,13 @@ window.onload = function () {
                 stringWithScore = scoreNumber.toString();
 
             if (stringWithScore.length === 1) {
-                scoreCounterXCoord = 61;
+                scoreCounterXCoord = 961;
             }
             if (stringWithScore.length === 2) {
-                scoreCounterXCoord = 41;
+                scoreCounterXCoord = 941;
             }
             if (stringWithScore.length === 3) {
-                scoreCounterXCoord = 20;
+                scoreCounterXCoord = 920;
             }
 
             return scoreCounterXCoord;
@@ -1085,6 +1076,11 @@ window.onload = function () {
             scoreCounterXCoord = calculateScorePointsXCoord(score);
         }, false);
 
+        containerForScoreBoardNodes = document.createDocumentFragment();
+        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, +score));
+        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.MAXIMUM_SCORE_X_COORD, CONSTANTS.MAXIMUM_SCORE_Y_COORD, '100'));
+        containerForScoreBoardNodes.appendChild(drawScoreBoardForwardSlash());
+
         // TODO: implement functionality;
         function insertTick(x, y) {
             var tick;
@@ -1092,8 +1088,8 @@ window.onload = function () {
             tick = document.createElementNS(svgNameSpace, 'image');
             tick.setAttribute('x', x);
             tick.setAttribute('y', y);
-            tick.setAttribute('height', '40');
-            tick.setAttribute('width', '30');
+            tick.setAttribute('height', '38');
+            tick.setAttribute('width', '25');
             tick.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/tick.png');
 
             return tick;
@@ -1105,7 +1101,7 @@ window.onload = function () {
             cross = document.createElementNS(svgNameSpace, 'image');
             cross.setAttribute('x', x);
             cross.setAttribute('y', y);
-            cross.setAttribute('height', '40');
+            cross.setAttribute('height', '38');
             cross.setAttribute('width', '25');
             cross.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/cross.png');
 
@@ -1114,21 +1110,15 @@ window.onload = function () {
 
         // The variable below contains the initial drawing of the scoreboard - 25 crosses,
         // should not serve other purposes.
-        initialCrosses = document.createDocumentFragment();
+        var initialCrossFragment = document.createDocumentFragment();
 
         for (var i = 0; i < 25; i += 1) {
             var cross = insertCross(10 + i * 30, 7);
-            initialCrosses.appendChild(cross);
+            initialCrossFragment.appendChild(cross);
         }
 
-        containerForScoreBoardNumbersNodes = document.createDocumentFragment();
-        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, score));
-        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.MAXIMUM_SCORE_X_COORD, CONSTANTS.MAXIMUM_SCORE_Y_COORD, '100'));
-        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardForwardSlash());
-
-        scoreNumbersDrawingBoard.appendChild(containerForScoreBoardNumbersNodes);
-        scoreIconsDrawingBoard.appendChild(initialCrosses);
-
+        drawingBoard.appendChild(containerForScoreBoardNodes);
+        drawingBoard.appendChild(initialCrossFragment);
     }
 
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
