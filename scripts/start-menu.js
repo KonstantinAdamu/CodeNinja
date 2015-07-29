@@ -1,7 +1,11 @@
 (function () {
     function changeButtonBackground(ev) {
         if (ev.target.className === 'button') {
+<<<<<<< HEAD
             ev.target.style.backgroundColor = 'black';
+=======
+            ev.target.style.backgroundColor = 'darkgreen';
+>>>>>>> 480250bfa420e011e68eb037dafbb070a653f865
         }
     }
 
@@ -32,7 +36,11 @@
 
     var startButton = document.createElement('div');
     startButton.setAttribute('class', 'button');
+<<<<<<< HEAD
     startButton.innerHTML += 'START';
+=======
+    startButton.innerHTML += 'Start the game!';
+>>>>>>> 480250bfa420e011e68eb037dafbb070a653f865
     startButton.addEventListener('click', startGame, false);
 
     var rulesButton = document.createElement('div');
@@ -41,7 +49,11 @@
 
     var quitButton = document.createElement('div');
     quitButton.setAttribute('class', 'button');
+<<<<<<< HEAD
     quitButton.innerHTML += 'Quit';
+=======
+    quitButton.innerHTML += 'Quit game';
+>>>>>>> 480250bfa420e011e68eb037dafbb070a653f865
 
     startMenu.appendChild(startButton);
     startMenu.appendChild(rulesButton);

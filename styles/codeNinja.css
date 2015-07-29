@@ -2,13 +2,24 @@ body {
     background: #9CDE23 url(../images/NinjaBackground.png) no-repeat;
 }
 
+<<<<<<< HEAD
 #container {
     position: absolute;
+=======
+#wrapper {
+>>>>>>> 480250bfa420e011e68eb037dafbb070a653f865
     width: 1200px;
     height: 500px;
     top: 115px;
     left: 100px;
     border: 5px outset black;
+    display: none;
+}
+
+#container {
+    border: 5px outset black;
+    width: 1200px;
+    height: 500px;
     display: none;
 }
 
@@ -35,6 +46,7 @@ body {
 }
 
 #start-menu {
+<<<<<<< HEAD
 
     position: absolute;
     left: 470px;
@@ -43,6 +55,14 @@ body {
     height: 480px;
     background-color: rgba(0, 150, 0, 0.7);
     border-radius: 55px;
+=======
+    position: relative;
+    left: 300px;
+    width: 550px;
+    height: 480px;
+    background-color: rgba(0, 150, 0, 0.7);
+    border-radius: 50px;
+>>>>>>> 480250bfa420e011e68eb037dafbb070a653f865
     text-align: center;
 }
 
@@ -52,12 +72,20 @@ body {
     height: 50px;
     background-color: forestgreen;
     border: 2px solid seagreen;
+<<<<<<< HEAD
     border-radius: 10px;
+=======
+    border-radius: 25px;
+>>>>>>> 480250bfa420e011e68eb037dafbb070a653f865
     display: inline-block;
     font-family: 'Arial', sans-serif;
     font-size: 25px;
     font-weight: bold;
+<<<<<<< HEAD
     color: whitesmoke;
+=======
+    color: black;
+>>>>>>> 480250bfa420e011e68eb037dafbb070a653f865
     line-height: 50px;
     vertical-align: middle;
 
