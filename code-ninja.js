@@ -1,13 +1,13 @@
 window.onload = function () {
     function collides(a, b) {
-        return a.x - 50 < b.x + b.width &&
+        return a.x  < b.x + b.width &&
             a.x + a.width > b.x &&
             a.y < b.y + b.height &&
             a.y + a.height > b.y
             ;
     }
 
-    function collidesWithPipesRight(ninja, pipe) {
+    function collidesWithPipes(ninja, pipe) {
         var output =  pipe.some(function(item) {
             return collides(ninja, item);
         });
@@ -907,7 +907,7 @@ window.onload = function () {
         switch (ev.keyCode) {
             case 37:
                 //startX = startX - 50;
-                if (!checkForLeftCollision()) {
+                if (!collidesWithPipes({x: startX, y: startY, width: 150, height: 100}, pipeShapesArray)) {
                     update = 1;
                 }
                 break; // left
@@ -919,7 +919,7 @@ window.onload = function () {
                 }
                 break;
             case 39:
-                if (!collidesWithPipesRight({x: startX, y: startY, width: 150, height: 150}, pipeShapesArray)) {
+                if (!collidesWithPipes({x: startX, y: startY, width: 150, height: 100}, pipeShapesArray)) {
                     update = -2;
                 } //right
         }
@@ -972,7 +972,7 @@ window.onload = function () {
                 ninja.jump();
                 stage.add(ninjaLayer);
 
-                if (originalPos.y > startY && !collidesWithPipesRight({x: startX, y: startY, width: 150, height: 150}, pipeShapesArray)) {
+                if (originalPos.y > startY && !collidesWithPipes({x: startX, y: startY, width: 150, height: 150}, pipeShapesArray)) {
 
                     ninjaLayer = new Kinetic.Layer();
                     requestAnimationFrame(performJump);
