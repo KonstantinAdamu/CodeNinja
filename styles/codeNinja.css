@@ -1,17 +1,33 @@
 body {
     padding: 50px;
-    background: #9CDE23 url(../images/background-image.jpg) repeat-x;
+    background: #9CDE23 url(../images/NinjaBackground.png) no-repeat;
 }
 
 #container {
-    border: 5px solid darkgreen;
+    border: 5px outset black;
     width: 1200px;
     height: 500px;
+    top: 105px;
+    left: 95px;
+    position: absolute;
 }
 
 #scoreBoardSvg {
     position: absolute;
-    left: 100px;
-    top: 70px;
+    left: 125px;
+    top: 31px;
     z-index: 2;
+    border-style: inset;
+    border-color: white;
+    border-width: 5px;
+}
+
+#scoreCounterSvg {
+    position: absolute;
+    left: 1050px;
+    top: 31px;
+    z-index: 2;
+    border-style: inset;
+    border-color: white;
+    border-width: 5px;
 }

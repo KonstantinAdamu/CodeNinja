@@ -482,7 +482,7 @@ window.onload = function () {
                     right: obj.right + updateX,
                     top: obj.top,
                     updateX: obj.updateX,
-                    draw: function() {
+                    draw: function () {
                         drawSingleEnemy(obj.left + updateX);
                     }
 
@@ -502,7 +502,7 @@ window.onload = function () {
                     currentEnemy.updateX = obj.updateX;
                 }
 
-                currentEnemy.draw = function() {
+                currentEnemy.draw = function () {
                     drawSingleEnemy(obj.left + currentEnemy.updateX);
                 };
                 currentEnemy.left = obj.left + currentEnemy.updateX;
@@ -596,7 +596,7 @@ window.onload = function () {
                 left: enemyCoordinates[i],
                 right: enemyCoordinates[i] + 1,
                 updateX: 1,
-                draw: function() {
+                draw: function () {
                     drawSingleEnemy(this.left);
                 }
 
@@ -620,7 +620,7 @@ window.onload = function () {
         enemiesLayer.add(enemy);
     }
 
-    function drawEnemies (startScreen, endScreen) {
+    function drawEnemies(startScreen, endScreen) {
         var i,
             len,
             enemiesInScreen = enemies.filter(function (item) {
@@ -1010,20 +1010,23 @@ window.onload = function () {
 
     function drawScoreBoard() {
         var svgNameSpace,
-            drawingBoard,
-            containerForScoreBoardNodes,
             documentBody,
+            scoreIconsDrawingBoard,
+            scoreNumbersDrawingBoard,
+            containerForScoreBoardNumbersNodes,
+            initialCrosses,
             score = 0,
-            scoreCounterXCoord = 961,
+            scoreCounterXCoord = 61,
             CONSTANTS = {
                 SCORECOUNTER_Y_COORD: 37,
-                MAXIMUM_SCORE_X_COORD: 1020,
+                MAXIMUM_SCORE_X_COORD: 122,
                 MAXIMUM_SCORE_Y_COORD: 37,
                 MAXIMUM_SCORE_POINTS: 100
             };
 
         svgNameSpace = 'http://www.w3.org/2000/svg';
-        drawingBoard = document.getElementById('scoreBoardSvg');
+        scoreIconsDrawingBoard = document.getElementById('scoreBoardSvg');
+        scoreNumbersDrawingBoard = document.getElementById('scoreCounterSvg');
 
         function drawScoreBoardNumbers(x, y, value) {
             var scoreBoard,
@@ -1047,7 +1050,7 @@ window.onload = function () {
             var forwardSlash;
 
             forwardSlash = document.createElementNS(svgNameSpace, 'path');
-            forwardSlash.setAttribute('d', 'M 992 37 L 1004 37  L 1013 14 L 1001 14 z')
+            forwardSlash.setAttribute('d', 'M 91 37 L 105 37  L 110 14 L 96 14 z')
             forwardSlash.setAttribute('fill', 'white');
             forwardSlash.setAttribute('stroke', 'black');
 
@@ -1059,13 +1062,13 @@ window.onload = function () {
                 stringWithScore = scoreNumber.toString();
 
             if (stringWithScore.length === 1) {
-                scoreCounterXCoord = 961;
+                scoreCounterXCoord = 61;
             }
             if (stringWithScore.length === 2) {
-                scoreCounterXCoord = 941;
+                scoreCounterXCoord = 41;
             }
             if (stringWithScore.length === 3) {
-                scoreCounterXCoord = 920;
+                scoreCounterXCoord = 20;
             }
 
             return scoreCounterXCoord;
@@ -1082,11 +1085,6 @@ window.onload = function () {
             scoreCounterXCoord = calculateScorePointsXCoord(score);
         }, false);
 
-        containerForScoreBoardNodes = document.createDocumentFragment();
-        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, +score));
-        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.MAXIMUM_SCORE_X_COORD, CONSTANTS.MAXIMUM_SCORE_Y_COORD, '100'));
-        containerForScoreBoardNodes.appendChild(drawScoreBoardForwardSlash());
-
         // TODO: implement functionality;
         function insertTick(x, y) {
             var tick;
@@ -1094,8 +1092,8 @@ window.onload = function () {
             tick = document.createElementNS(svgNameSpace, 'image');
             tick.setAttribute('x', x);
             tick.setAttribute('y', y);
-            tick.setAttribute('height', '38');
-            tick.setAttribute('width', '25');
+            tick.setAttribute('height', '40');
+            tick.setAttribute('width', '30');
             tick.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/tick.png');
 
             return tick;
@@ -1107,7 +1105,7 @@ window.onload = function () {
             cross = document.createElementNS(svgNameSpace, 'image');
             cross.setAttribute('x', x);
             cross.setAttribute('y', y);
-            cross.setAttribute('height', '38');
+            cross.setAttribute('height', '40');
             cross.setAttribute('width', '25');
             cross.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/cross.png');
 
@@ -1116,15 +1114,21 @@ window.onload = function () {
 
         // The variable below contains the initial drawing of the scoreboard - 25 crosses,
         // should not serve other purposes.
-        var initialCrossFragment = document.createDocumentFragment();
+        initialCrosses = document.createDocumentFragment();
 
         for (var i = 0; i < 25; i += 1) {
             var cross = insertCross(10 + i * 30, 7);
-            initialCrossFragment.appendChild(cross);
+            initialCrosses.appendChild(cross);
         }
 
-        drawingBoard.appendChild(containerForScoreBoardNodes);
-        drawingBoard.appendChild(initialCrossFragment);
+        containerForScoreBoardNumbersNodes = document.createDocumentFragment();
+        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, score));
+        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.MAXIMUM_SCORE_X_COORD, CONSTANTS.MAXIMUM_SCORE_Y_COORD, '100'));
+        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardForwardSlash());
+
+        scoreNumbersDrawingBoard.appendChild(containerForScoreBoardNumbersNodes);
+        scoreIconsDrawingBoard.appendChild(initialCrosses);
+
     }
 
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
