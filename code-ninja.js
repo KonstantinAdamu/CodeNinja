@@ -1,25 +1,4 @@
 window.onload = function () {
-    function collides(a, b) {
-        return a.x  < b.x + b.width &&
-            a.x + a.width > b.x &&
-            a.y < b.y + b.height &&
-            a.y + a.height > b.y
-            ;
-    }
-
-    function collidesWithPipes(ninja, pipe) {
-        var output =  pipe.some(function(item) {
-            return collides(ninja, item);
-        });
-
-        //var output =  pipe.some(function (item) {
-        //    return ninja.x + ninja.width > item.x &&
-        //        item.y > (ninja.y + ninja.height);
-        //});
-        //console.log(pipe);
-        return output;
-    }
-
     function drawSky() {
         var sky = new Kinetic.Rect({
             x: CONSTANTS.MAP_START,
@@ -195,7 +174,6 @@ window.onload = function () {
             startX,
             y = CONSTANTS.GROUND_HEIGHT,
             pipe;
-        pipeShapesArray = [];
 
         for (i = 0, len = startingPoints.length; i < len; i += 1) {
             startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
@@ -210,7 +188,6 @@ window.onload = function () {
                 strokeWidth: 2
             });
             layer.add(pipe);
-            pipeShapesArray.push({x: pipe.getX(), y: pipe.getY(), width: pipe.getWidth(), height: pipe.getHeight()});
 
             pipe = new Kinetic.Rect({
                 x: startX - 5,
@@ -222,7 +199,6 @@ window.onload = function () {
                 strokeWidth: 2
             });
             layer.add(pipe);
-            pipeShapesArray.push({x: pipe.getX(), y: pipe.getY(), width: pipe.getWidth(), height: pipe.getHeight()});
         }
     }
 
@@ -456,6 +432,7 @@ window.onload = function () {
         }
 
         newSword = sword.map(mapCoord);
+        console.log(newSword);
         newSwordDecoration = swordDecoration.map(mapCoord);
         newFaceWalkingNinja = faceWalkingNinja.map(mapCoord);
         newBodyWalkingNinja = bodyWalkingNinja.map(mapCoord);
@@ -470,48 +447,6 @@ window.onload = function () {
         newLogoJumpingNinja = logoJumpingNinja.map(mapCoord);
         newLeftEyebrowJumpingNinja = leftEyebrowJumpingNinja.map(mapCoord);
         newRightEyebrowJumpingNinja = rightEyebrowJumpingNinja.map(mapCoord);
-    }
-
-    function calculateNewEnemiesCoordinates(updateX) {
-        if (typeof updateX === 'number') {
-            enemies = enemies.map(function (obj) {
-                return {
-                    left: obj.left + updateX,
-                    right: obj.right + updateX,
-                    top: obj.top,
-                    updateX: obj.updateX,
-                    draw: function() {
-                        drawSingleEnemy(obj.left + updateX);
-                    }
-
-                };
-            });
-        } else {
-            enemies = enemies.map(function (obj) {
-                var currentEnemy = {
-                    top: obj.top
-                };
-
-                if ((checkEnemyForRightCollision(obj))) {
-                    currentEnemy.updateX = -1;
-                } else if (checkEnemyForLeftCollision(obj)) {
-                    currentEnemy.updateX = 1;
-                } else {
-                    currentEnemy.updateX = obj.updateX;
-                }
-
-                currentEnemy.draw = function() {
-                    drawSingleEnemy(obj.left + currentEnemy.updateX);
-                };
-                currentEnemy.left = obj.left + currentEnemy.updateX;
-                currentEnemy.right = obj.right + currentEnemy.updateX;
-
-                return currentEnemy;
-
-            });
-        }
-        console.log(enemies);
-
     }
 
     function checkIfNinjaIsOnBonusCode() {
@@ -567,69 +502,6 @@ window.onload = function () {
         return stage.add(ninjaLayer);
     }
 
-    function checkEnemyForLeftCollision(obj) {
-        var isInColliseWithPipe = CONSTANTS.INITIAL_PIPES_COORDINATES.some(function (coord) {
-            return obj.left === coord + 2;
-        });
-
-        return isInColliseWithPipe;
-    }
-
-    function checkEnemyForRightCollision(obj) {
-        var isInColliseWithPipe = CONSTANTS.INITIAL_PIPES_COORDINATES.some(function (coord) {
-            return obj.right === coord;
-        });
-
-        return isInColliseWithPipe;
-    }
-
-    function generateEnemies(enemyCoordinates) {
-        var i,
-            len,
-            enemies = [];
-
-        for (i = 0, len = enemyCoordinates.length; i < len; i += 1) {
-            var enemy = {
-                top: CONSTANTS.GROUND_HEIGHT - 50,
-                left: enemyCoordinates[i],
-                right: enemyCoordinates[i] + 1,
-                updateX: 1,
-                draw: function() {
-                    drawSingleEnemy(this.left);
-                }
-
-            };
-
-            enemies.push(enemy);
-        }
-
-        return enemies;
-    }
-
-    function drawSingleEnemy(startX) {
-        var enemy = new Kinetic.Rect({
-            x: startX * CONSTANTS.GROUND_CELL_WIDTH,
-            y: CONSTANTS.GROUND_HEIGHT - 50,
-            width: 50,
-            height: 50,
-            fill: 'black',
-            stroke: 'blue'
-        });
-        enemiesLayer.add(enemy);
-    }
-
-    function drawEnemies (startScreen, endScreen) {
-        var i,
-            len,
-            enemiesInScreen = enemies.filter(function (item) {
-                return ((item.left >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && item.left <= endScreen / CONSTANTS.GROUND_CELL_WIDTH) || (item.right >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && item.right <= endScreen / CONSTANTS.GROUND_CELL_WIDTH));
-            });
-
-        for (i = 0, len = enemiesInScreen.length; i < len; i += 1) {
-            enemiesInScreen[i].draw(enemiesInScreen[i].left);
-        }
-    }
-
     function drawLandscape() {
         drawSky();
         drawBigDarkBushes(screenStart, screenEnd);
@@ -649,10 +521,7 @@ window.onload = function () {
 
     var stage,
         layer,
-        ninja,
         ninjaLayer,
-        enemies,
-        enemiesLayer,
         CONSTANTS = {
             MAP_START: 0,
             MAP_END: 12000,
@@ -668,9 +537,7 @@ window.onload = function () {
             INITIAL_SMALL_DARK_BUSHES_COORDINATES: [17, 65, 113, 172],
             INITIAL_BIG_LIGHT_BUSHES_COORDINATES: [12, 61, 91, 141],
             INITIAL_SMALL_LIGHT_BUSHES_COORDINATES: [25, 43, 73, 109, 121, 180],
-            INITIAL_PIPES_COORDINATES: [10, 17, 29, 39, 47, 58, 175, 195],
-            //INITIAL_ENEMIES_COORDINATES: [13, 31, 41, 49, 58, 175, 195],
-            INITIAL_ENEMIES_COORDINATES: [13],
+            INITIAL_PIPES_COORDINATES: [29, 39, 47, 58, 175, 195],
             INITIAL_SPECIAL_BRICKS_COORDINATES: [17, 22, 24, 66, 67, 68, 89, 107, 110, 113, 131, 134, 157, 158, 159, 165, 166, 182, 184, 186],
             INITIAL_REGULAR_BRICKS_COORDINATES: [21, 23, 25, 65, 69, 88, 90, 95, 101, 102, 119, 132, 133, 160, 161, 162, 163, 164, 167, 168, 183, 185],
             INITIAL_UPSTAIRS_COORDINATES: [137, 200],
@@ -679,8 +546,8 @@ window.onload = function () {
             NINJA_START_X: 250,
             NINJA_START_Y: 260,
             DELTA_X_HEAD: 15,
-            NINJA_JUMP_HEIGHT: 150,
-            ENEMIES_DIRECTION: 1
+            NINJA_JUMP_HEIGHT: 150
+
         },
         bigDarkBushesInScreenCoordinates = CONSTANTS.INITIAL_BIG_DARK_BUSHES_COORDINATES,
         smallDarkBushesInScreenCoordinates = CONSTANTS.INITIAL_SMALL_DARK_BUSHES_COORDINATES,
@@ -696,8 +563,6 @@ window.onload = function () {
         screenEnd = screenStart + CONSTANTS.SCREEN_WIDTH,
         startX = CONSTANTS.NINJA_START_X,
         startY = CONSTANTS.NINJA_START_Y,
-        enemiesPosition = CONSTANTS.INITIAL_ENEMIES_COORDINATES,
-        enemiesDirection = CONSTANTS.ENEMIES_DIRECTION,
 
         sword = [
             110, 109,
@@ -863,8 +728,7 @@ window.onload = function () {
         newSword, newSwordDecoration, newFaceWalkingNinja, newBodyWalkingNinja, newLogoWalkingNinja,
         newLeftEyebrowWalkingNinja, newRightEyebrowWalkingNinja, newCloak, newHeadJumpingNinja,
         newFaceJumpingNinja, newBodyJumpingNinja, newArmJumpingNinja, newLogoJumpingNinja,
-        newLeftEyebrowJumpingNinja, newRightEyebrowJumpingNinja, isJumping = false,
-        pipeShapesArray = [];
+        newLeftEyebrowJumpingNinja, newRightEyebrowJumpingNinja, jumpingShapes, isJumping = false;
 
     stage = new Kinetic.Stage({
         container: 'container',
@@ -875,15 +739,12 @@ window.onload = function () {
 
     layer = new Kinetic.Layer();
     ninjaLayer = new Kinetic.Layer();
-    enemiesLayer = new Kinetic.Layer();
 
-    ninja = {
+    var ninja = {
         top: 250,
         right: 400,
         bottom: 400,
         left: 250,
-        x: startX,
-        y: startY,
         walk: function () {
             return drawWalkingNinja();
         },
@@ -892,13 +753,7 @@ window.onload = function () {
         }
     };
 
-    enemies = generateEnemies(enemiesPosition);
-
     var event = new CustomEvent('collectCoin');
-
-    document.body.addEventListener('collectCoin', function () {
-        console.log('Coin collected!!!');
-    });
 
     document.body.addEventListener('keydown', function (ev) {
         var update = 0;
@@ -907,7 +762,7 @@ window.onload = function () {
         switch (ev.keyCode) {
             case 37:
                 //startX = startX - 50;
-                if (!collidesWithPipes({x: startX, y: startY, width: 150, height: 100}, pipeShapesArray)) {
+                if (!checkForLeftCollision()) {
                     update = 1;
                 }
                 break; // left
@@ -919,25 +774,26 @@ window.onload = function () {
                 }
                 break;
             case 39:
-                if (!collidesWithPipes({x: startX, y: startY, width: 150, height: 100}, pipeShapesArray)) {
-                    update = -2;
-                } //right
+                //startX = startX + 50;
+
+                if (!checkForRightCollision()) {
+                    update = -1;
+                }
+                break; // right
         }
 
         if (!!update) {
+            var documentBody = document.getElementsByTagName('body')[0];
             layer = new Kinetic.Layer();
 
             calculateNewCoordinates(update);
             calculateNinjaNewCoordinates();
-            calculateNewEnemiesCoordinates(update);
-
             if (checkIfNinjaIsOnBonusCode()) {
-                document.body.dispatchEvent(event);
+                documentBody.dispatchEvent(event);
             }
 
             drawLandscape();
             stage.add(layer);
-            stage.add(enemiesLayer);
             ninjaLayer = new Kinetic.Layer();
             //stage.add(layer)
 
@@ -972,12 +828,13 @@ window.onload = function () {
                 ninja.jump();
                 stage.add(ninjaLayer);
 
-                if (originalPos.y > startY && !collidesWithPipes({x: startX, y: startY, width: 150, height: 150}, pipeShapesArray)) {
+                if (originalPos.y > startY) {
 
                     ninjaLayer = new Kinetic.Layer();
                     requestAnimationFrame(performJump);
                 } else {
-
+                    //jumpingShapes.splice(
+                    //    jumpingShapes.indexOf(originalPos));
                     isJumping = false;
                 }
 
@@ -988,7 +845,6 @@ window.onload = function () {
             drawLandscape();
 
             stage.add(layer);
-            stage.add(enemiesLayer);
             ninjaLayer = new Kinetic.Layer();
             startY += updateNinja;
 
@@ -1004,20 +860,23 @@ window.onload = function () {
 
     function drawScoreBoard() {
         var svgNameSpace,
-            drawingBoard,
-            containerForScoreBoardNodes,
             documentBody,
+            scoreIconsDrawingBoard,
+            scoreNumbersDrawingBoard,
+            containerForScoreBoardNumbersNodes,
+            initialCrosses,
             score = 0,
-            scoreCounterXCoord = 961,
+            scoreCounterXCoord = 61,
             CONSTANTS = {
                 SCORECOUNTER_Y_COORD: 37,
-                MAXIMUM_SCORE_X_COORD: 1020,
+                MAXIMUM_SCORE_X_COORD: 122,
                 MAXIMUM_SCORE_Y_COORD: 37,
                 MAXIMUM_SCORE_POINTS: 100
             };
 
         svgNameSpace = 'http://www.w3.org/2000/svg';
-        drawingBoard = document.getElementById('scoreBoardSvg');
+        scoreIconsDrawingBoard = document.getElementById('scoreBoardSvg');
+        scoreNumbersDrawingBoard = document.getElementById('scoreCounterSvg');
 
         function drawScoreBoardNumbers(x, y, value) {
             var scoreBoard,
@@ -1041,7 +900,7 @@ window.onload = function () {
             var forwardSlash;
 
             forwardSlash = document.createElementNS(svgNameSpace, 'path');
-            forwardSlash.setAttribute('d', 'M 992 37 L 1004 37  L 1013 14 L 1001 14 z')
+            forwardSlash.setAttribute('d', 'M 91 37 L 105 37  L 110 14 L 96 14 z')
             forwardSlash.setAttribute('fill', 'white');
             forwardSlash.setAttribute('stroke', 'black');
 
@@ -1053,13 +912,13 @@ window.onload = function () {
                 stringWithScore = scoreNumber.toString();
 
             if (stringWithScore.length === 1) {
-                scoreCounterXCoord = 961;
+                scoreCounterXCoord = 61;
             }
             if (stringWithScore.length === 2) {
-                scoreCounterXCoord = 941;
+                scoreCounterXCoord = 41;
             }
             if (stringWithScore.length === 3) {
-                scoreCounterXCoord = 920;
+                scoreCounterXCoord = 20;
             }
 
             return scoreCounterXCoord;
@@ -1076,11 +935,6 @@ window.onload = function () {
             scoreCounterXCoord = calculateScorePointsXCoord(score);
         }, false);
 
-        containerForScoreBoardNodes = document.createDocumentFragment();
-        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, +score));
-        containerForScoreBoardNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.MAXIMUM_SCORE_X_COORD, CONSTANTS.MAXIMUM_SCORE_Y_COORD, '100'));
-        containerForScoreBoardNodes.appendChild(drawScoreBoardForwardSlash());
-
         // TODO: implement functionality;
         function insertTick(x, y) {
             var tick;
@@ -1088,8 +942,8 @@ window.onload = function () {
             tick = document.createElementNS(svgNameSpace, 'image');
             tick.setAttribute('x', x);
             tick.setAttribute('y', y);
-            tick.setAttribute('height', '38');
-            tick.setAttribute('width', '25');
+            tick.setAttribute('height', '40');
+            tick.setAttribute('width', '30');
             tick.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/tick.png');
 
             return tick;
@@ -1110,16 +964,23 @@ window.onload = function () {
 
         // The variable below contains the initial drawing of the scoreboard - 25 crosses,
         // should not serve other purposes.
-        var initialCrossFragment = document.createDocumentFragment();
+        initialCrosses = document.createDocumentFragment();
 
         for (var i = 0; i < 25; i += 1) {
             var cross = insertCross(10 + i * 30, 7);
-            initialCrossFragment.appendChild(cross);
+            initialCrosses.appendChild(cross);
         }
 
-        drawingBoard.appendChild(containerForScoreBoardNodes);
-        drawingBoard.appendChild(initialCrossFragment);
+        containerForScoreBoardNumbersNodes = document.createDocumentFragment();
+        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, score));
+        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.MAXIMUM_SCORE_X_COORD, CONSTANTS.MAXIMUM_SCORE_Y_COORD, '100'));
+        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardForwardSlash());
+
+        scoreNumbersDrawingBoard.appendChild(containerForScoreBoardNumbersNodes);
+        scoreIconsDrawingBoard.appendChild(initialCrosses);
+
     }
+
 
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
     //TODO: Second  raw of bricks
@@ -1133,19 +994,12 @@ window.onload = function () {
     function anim() {
         layer = new Kinetic.Layer();
         ninjaLayer = new Kinetic.Layer();
-        enemiesLayer = new Kinetic.Layer();
-
         calculateNinjaNewCoordinates();
-        calculateNewEnemiesCoordinates(); //TODO: To be fixed
-        drawEnemies(screenStart, screenEnd);
-        drawScoreBoard();
         drawLandscape();
-
-        setTimeout(anim, 1500);
-
+        drawScoreBoard();
+        //setTimeout(anim, 10);
         ninja.walk();
         stage.add(layer);
-        stage.add(enemiesLayer);
         return stage.add(ninjaLayer);
     }
 

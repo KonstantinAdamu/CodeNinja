@@ -1,6 +1,6 @@
 body {
     padding: 50px;
-    background: #9CDE23 url(../images/NinjaBackground.png) no-repeat;
+    background: #9CDE23 url(../images/Untitled.png) no-repeat;
 }
 
 #container {
@@ -8,7 +8,7 @@ body {
     width: 1200px;
     height: 500px;
     top: 105px;
-    left: 95px;
+    left:95px;
     position: absolute;
 }
 
@@ -21,7 +21,6 @@ body {
     border-color: white;
     border-width: 5px;
 }
-
 #scoreCounterSvg {
     position: absolute;
     left: 1050px;
