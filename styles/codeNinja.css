@@ -3,13 +3,19 @@ body {
     background: #9CDE23 url(../images/NinjaBackground.png) no-repeat;
 }
 
-#container {
-    border: 5px outset black;
+#wrapper {
     width: 1200px;
     height: 500px;
     top: 105px;
     left:95px;
     position: absolute;
+}
+
+#container {
+    border: 5px outset black;
+    width: 1200px;
+    height: 500px;
+    display: none;
 }
 
 #scoreBoardSvg {
@@ -20,6 +26,7 @@ body {
     border-style: inset;
     border-color: white;
     border-width: 5px;
+    display: none;
 }
 #scoreCounterSvg {
     position: absolute;
@@ -29,4 +36,32 @@ body {
     border-style: inset;
     border-color: white;
     border-width: 5px;
+    display: none;
+}
+
+#start-menu {
+    position: relative;
+    left: 300px;
+    width: 550px;
+    height: 480px;
+    background-color: rgba(0, 150, 0, 0.7);
+    border-radius: 50px;
+    text-align: center;
+}
+
+.button {
+    margin-top: 50px;
+    width: 350px;
+    height: 50px;
+    background-color: forestgreen;
+    border: 2px solid seagreen;
+    border-radius: 25px;
+    display: inline-block;
+    font-family: 'Arial', sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+    line-height: 50px;
+    vertical-align: middle;
+
 }
