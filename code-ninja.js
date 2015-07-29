@@ -1,4 +1,26 @@
 window.onload = function () {
+
+    function collides(a, b) {
+        return a.x - 50 < b.x + b.width &&
+            a.x + a.width > b.x
+            //&&
+           // a.y < b.y + b.height &&
+            //a.y + a.height > b.y
+            ;
+    }
+    function collidesWithPipesRight(ninja, pipe) {
+        var output =  pipe.some(function(item) {
+            return collides(ninja, item);
+        });
+
+        //var output =  pipe.some(function (item) {
+        //    return ninja.x + ninja.width > item.x &&
+        //        item.y > (ninja.y + ninja.height);
+        //});
+        //console.log(pipe);
+        return output;
+    }
+
     function drawSky() {
         var sky = new Kinetic.Rect({
             x: CONSTANTS.MAP_START,
@@ -174,6 +196,7 @@ window.onload = function () {
             startX,
             y = CONSTANTS.GROUND_HEIGHT,
             pipe;
+            pipeShapesArray = [];
 
         for (i = 0, len = startingPoints.length; i < len; i += 1) {
             startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
@@ -188,6 +211,7 @@ window.onload = function () {
                 strokeWidth: 2
             });
             layer.add(pipe);
+            pipeShapesArray.push({x: pipe.getX(), y: pipe.getY(), width: pipe.getWidth(), height: pipe.getHeight()});
 
             pipe = new Kinetic.Rect({
                 x: startX - 5,
@@ -199,6 +223,7 @@ window.onload = function () {
                 strokeWidth: 2
             });
             layer.add(pipe);
+            pipeShapesArray.push({x: pipe.getX(), y: pipe.getY(), width: pipe.getWidth(), height: pipe.getHeight()});
         }
     }
 
@@ -432,7 +457,7 @@ window.onload = function () {
         }
 
         newSword = sword.map(mapCoord);
-        console.log(newSword);
+
         newSwordDecoration = swordDecoration.map(mapCoord);
         newFaceWalkingNinja = faceWalkingNinja.map(mapCoord);
         newBodyWalkingNinja = bodyWalkingNinja.map(mapCoord);
@@ -487,7 +512,7 @@ window.onload = function () {
 
             });
         }
-        console.log(enemies);
+        //console.log(enemies);
 
     }
 
@@ -840,7 +865,8 @@ window.onload = function () {
         newSword, newSwordDecoration, newFaceWalkingNinja, newBodyWalkingNinja, newLogoWalkingNinja,
         newLeftEyebrowWalkingNinja, newRightEyebrowWalkingNinja, newCloak, newHeadJumpingNinja,
         newFaceJumpingNinja, newBodyJumpingNinja, newArmJumpingNinja, newLogoJumpingNinja,
-        newLeftEyebrowJumpingNinja, newRightEyebrowJumpingNinja, jumpingShapes, isJumping = false;
+        newLeftEyebrowJumpingNinja, newRightEyebrowJumpingNinja, isJumping = false,
+        pipeShapesArray = [];
 
     stage = new Kinetic.Stage({
         container: 'container',
@@ -858,6 +884,8 @@ window.onload = function () {
         right: 400,
         bottom: 400,
         left: 250,
+        x: startX,
+        y: startY,
         walk: function () {
             return drawWalkingNinja();
         },
@@ -895,8 +923,8 @@ window.onload = function () {
             case 39:
                 //startX = startX + 50;
 
-                if (!checkForRightCollision()) {
-                    update = -1;
+                if (!collidesWithPipesRight({x: startX, y: startY, width: 150, height: 150}, pipeShapesArray)) {
+                    update = -2;
                 }
                 break; // right
         }
@@ -949,7 +977,7 @@ window.onload = function () {
                 ninja.jump();
                 stage.add(ninjaLayer);
 
-                if (originalPos.y > startY) {
+                if (originalPos.y > startY && !collidesWithPipesRight({x: startX, y: startY, width: 150, height: 150}, pipeShapesArray)) {
 
                     ninjaLayer = new Kinetic.Layer();
                     requestAnimationFrame(performJump);
