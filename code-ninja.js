@@ -449,6 +449,48 @@ window.onload = function () {
         newRightEyebrowJumpingNinja = rightEyebrowJumpingNinja.map(mapCoord);
     }
 
+    function calculateNewEnemiesCoordinates(updateX) {
+        if (typeof updateX === 'number') {
+            enemies = enemies.map(function (obj) {
+                return {
+                    left: obj.left + updateX,
+                    right: obj.right + updateX,
+                    top: obj.top,
+                    updateX: obj.updateX,
+                    draw: function() {
+                        drawSingleEnemy(obj.left + updateX);
+                    }
+
+                };
+            });
+        } else {
+            enemies = enemies.map(function (obj) {
+                var currentEnemy = {
+                    top: obj.top
+                };
+
+                if ((checkEnemyForRightCollision(obj))) {
+                    currentEnemy.updateX = -1;
+                } else if (checkEnemyForLeftCollision(obj)) {
+                    currentEnemy.updateX = 1;
+                } else {
+                    currentEnemy.updateX = obj.updateX;
+                }
+
+                currentEnemy.draw = function() {
+                    drawSingleEnemy(obj.left + currentEnemy.updateX);
+                };
+                currentEnemy.left = obj.left + currentEnemy.updateX;
+                currentEnemy.right = obj.right + currentEnemy.updateX;
+
+                return currentEnemy;
+
+            });
+        }
+        console.log(enemies);
+
+    }
+
     function checkIfNinjaIsOnBonusCode() {
         return textInScreenCoordinates.some(function (coord) {
             return ninja.left / 50 === coord && ninja.bottom === CONSTANTS.FIRST_RAW_BRICK_HEIGHT;
@@ -502,6 +544,69 @@ window.onload = function () {
         return stage.add(ninjaLayer);
     }
 
+    function checkEnemyForLeftCollision(obj) {
+        var isInColliseWithPipe = CONSTANTS.INITIAL_PIPES_COORDINATES.some(function (coord) {
+            return obj.left === coord + 2;
+        });
+
+        return isInColliseWithPipe;
+    }
+
+    function checkEnemyForRightCollision(obj) {
+        var isInColliseWithPipe = CONSTANTS.INITIAL_PIPES_COORDINATES.some(function (coord) {
+            return obj.right === coord;
+        });
+
+        return isInColliseWithPipe;
+    }
+
+    function generateEnemies(enemyCoordinates) {
+        var i,
+            len,
+            enemies = [];
+
+        for (i = 0, len = enemyCoordinates.length; i < len; i += 1) {
+            var enemy = {
+                top: CONSTANTS.GROUND_HEIGHT - 50,
+                left: enemyCoordinates[i],
+                right: enemyCoordinates[i] + 1,
+                updateX: 1,
+                draw: function() {
+                    drawSingleEnemy(this.left);
+                }
+
+            };
+
+            enemies.push(enemy);
+        }
+
+        return enemies;
+    }
+
+    function drawSingleEnemy(startX) {
+        var enemy = new Kinetic.Rect({
+            x: startX * CONSTANTS.GROUND_CELL_WIDTH,
+            y: CONSTANTS.GROUND_HEIGHT - 50,
+            width: 50,
+            height: 50,
+            fill: 'black',
+            stroke: 'blue'
+        });
+        enemiesLayer.add(enemy);
+    }
+
+    function drawEnemies (startScreen, endScreen) {
+        var i,
+            len,
+            enemiesInScreen = enemies.filter(function (item) {
+                return ((item.left >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && item.left <= endScreen / CONSTANTS.GROUND_CELL_WIDTH) || (item.right >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && item.right <= endScreen / CONSTANTS.GROUND_CELL_WIDTH));
+            });
+
+        for (i = 0, len = enemiesInScreen.length; i < len; i += 1) {
+            enemiesInScreen[i].draw(enemiesInScreen[i].left);
+        }
+    }
+
     function drawLandscape() {
         drawSky();
         drawBigDarkBushes(screenStart, screenEnd);
@@ -521,7 +626,10 @@ window.onload = function () {
 
     var stage,
         layer,
+        ninja,
         ninjaLayer,
+        enemies,
+        enemiesLayer,
         CONSTANTS = {
             MAP_START: 0,
             MAP_END: 12000,
@@ -537,7 +645,9 @@ window.onload = function () {
             INITIAL_SMALL_DARK_BUSHES_COORDINATES: [17, 65, 113, 172],
             INITIAL_BIG_LIGHT_BUSHES_COORDINATES: [12, 61, 91, 141],
             INITIAL_SMALL_LIGHT_BUSHES_COORDINATES: [25, 43, 73, 109, 121, 180],
-            INITIAL_PIPES_COORDINATES: [29, 39, 47, 58, 175, 195],
+            INITIAL_PIPES_COORDINATES: [10, 17, 29, 39, 47, 58, 175, 195],
+            //INITIAL_ENEMIES_COORDINATES: [13, 31, 41, 49, 58, 175, 195],
+            INITIAL_ENEMIES_COORDINATES: [13],
             INITIAL_SPECIAL_BRICKS_COORDINATES: [17, 22, 24, 66, 67, 68, 89, 107, 110, 113, 131, 134, 157, 158, 159, 165, 166, 182, 184, 186],
             INITIAL_REGULAR_BRICKS_COORDINATES: [21, 23, 25, 65, 69, 88, 90, 95, 101, 102, 119, 132, 133, 160, 161, 162, 163, 164, 167, 168, 183, 185],
             INITIAL_UPSTAIRS_COORDINATES: [137, 200],
@@ -546,8 +656,8 @@ window.onload = function () {
             NINJA_START_X: 250,
             NINJA_START_Y: 260,
             DELTA_X_HEAD: 15,
-            NINJA_JUMP_HEIGHT: 150
-
+            NINJA_JUMP_HEIGHT: 150,
+            ENEMIES_DIRECTION: 1
         },
         bigDarkBushesInScreenCoordinates = CONSTANTS.INITIAL_BIG_DARK_BUSHES_COORDINATES,
         smallDarkBushesInScreenCoordinates = CONSTANTS.INITIAL_SMALL_DARK_BUSHES_COORDINATES,
@@ -563,6 +673,8 @@ window.onload = function () {
         screenEnd = screenStart + CONSTANTS.SCREEN_WIDTH,
         startX = CONSTANTS.NINJA_START_X,
         startY = CONSTANTS.NINJA_START_Y,
+        enemiesPosition = CONSTANTS.INITIAL_ENEMIES_COORDINATES,
+        enemiesDirection = CONSTANTS.ENEMIES_DIRECTION,
 
         sword = [
             110, 109,
@@ -739,8 +851,9 @@ window.onload = function () {
 
     layer = new Kinetic.Layer();
     ninjaLayer = new Kinetic.Layer();
+    enemiesLayer = new Kinetic.Layer();
 
-    var ninja = {
+    ninja = {
         top: 250,
         right: 400,
         bottom: 400,
@@ -752,6 +865,8 @@ window.onload = function () {
             return drawJumpingNinja();
         }
     };
+
+    enemies = generateEnemies(enemiesPosition);
 
     var event = new CustomEvent('collectCoin');
 
@@ -791,12 +906,15 @@ window.onload = function () {
 
             calculateNewCoordinates(update);
             calculateNinjaNewCoordinates();
+            calculateNewEnemiesCoordinates(update);
+
             if (checkIfNinjaIsOnBonusCode()) {
                 document.body.dispatchEvent(event);
             }
 
             drawLandscape();
             stage.add(layer);
+            stage.add(enemiesLayer);
             ninjaLayer = new Kinetic.Layer();
             //stage.add(layer)
 
@@ -848,6 +966,7 @@ window.onload = function () {
             drawLandscape();
 
             stage.add(layer);
+            stage.add(enemiesLayer);
             ninjaLayer = new Kinetic.Layer();
             startY += updateNinja;
 
@@ -992,12 +1111,19 @@ window.onload = function () {
     function anim() {
         layer = new Kinetic.Layer();
         ninjaLayer = new Kinetic.Layer();
+        enemiesLayer = new Kinetic.Layer();
+
         calculateNinjaNewCoordinates();
-        drawLandscape();
+        calculateNewEnemiesCoordinates(); //TODO: To be fixed
+        drawEnemies(screenStart, screenEnd);
         drawScoreBoard();
-        //setTimeout(anim, 10);
+        drawLandscape();
+
+        setTimeout(anim, 1500);
+
         ninja.walk();
         stage.add(layer);
+        stage.add(enemiesLayer);
         return stage.add(ninjaLayer);
     }
 
