@@ -2,7 +2,6 @@
     function changeButtonBackground(ev) {
         if (ev.target.className === 'button') {
             ev.target.style.backgroundColor = 'black';
-            ev.target.style.backgroundColor = 'darkgreen';
         }
     }
 
@@ -34,7 +33,6 @@
     var startButton = document.createElement('div');
     startButton.setAttribute('class', 'button');
     startButton.innerHTML += 'START';
-    startButton.innerHTML += 'Start the game!';
     startButton.addEventListener('click', startGame, false);
 
     var rulesButton = document.createElement('div');
@@ -43,7 +41,6 @@
 
     var quitButton = document.createElement('div');
     quitButton.setAttribute('class', 'button');
-    quitButton.innerHTML += 'Quit';
     quitButton.innerHTML += 'Quit';
 
     startMenu.appendChild(startButton);
