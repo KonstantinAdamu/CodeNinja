@@ -1639,12 +1639,13 @@ var mainGame = function () {
 
     function drawScoreBoard() {
         var svgNameSpace,
-            documentBody,
             scoreIconsDrawingBoard,
             scoreNumbersDrawingBoard,
             containerForScoreBoardNumbersNodes,
-            initialCrosses,
+            crossFragment,
+            tickFragment,
             score = 0,
+            eventCounter = 0,
             scoreCounterXCoord = 61,
             CONSTANTS = {
                 SCORECOUNTER_Y_COORD: 37,
@@ -1654,7 +1655,9 @@ var mainGame = function () {
             };
 
         svgNameSpace = 'http://www.w3.org/2000/svg';
+        // Contains the 'tick' and 'cross' icons .
         scoreIconsDrawingBoard = document.getElementById('scoreBoardSvg');
+        // Contains the score counter and the maximum score, which can be achieved.
         scoreNumbersDrawingBoard = document.getElementById('scoreCounterSvg');
 
         function drawScoreBoardNumbers(x, y, value) {
@@ -1686,6 +1689,8 @@ var mainGame = function () {
             return forwardSlash;
         }
 
+        // The function sets the score counter X coordinate accordingly to it's digit length.
+
         function calculateScorePointsXCoord(scoreNumber) {
             var scoreCounterXCoord = 0,
                 stringWithScore = scoreNumber.toString();
@@ -1703,18 +1708,18 @@ var mainGame = function () {
             return scoreCounterXCoord;
         }
 
-        documentBody = document.getElementsByTagName('body')[0];
-        documentBody.addEventListener('collectCoin', function () {
+        document.body.addEventListener('collectCoin', function () {
+            eventCounter++;
             if (score >= CONSTANTS.MAXIMUM_SCORE_POINTS) {
                 score = CONSTANTS.MAXIMUM_SCORE_POINTS;
             }
             else {
                 score += 4;
             }
+
             scoreCounterXCoord = calculateScorePointsXCoord(score);
         }, false);
 
-        // TODO: implement functionality;
         function insertTick(x, y) {
             var tick;
 
@@ -1724,7 +1729,6 @@ var mainGame = function () {
             tick.setAttribute('height', '40');
             tick.setAttribute('width', '30');
             tick.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'icons/tick.png');
-
             return tick;
         }
 
@@ -1741,24 +1745,37 @@ var mainGame = function () {
             return cross;
         }
 
-        // The variable below contains the initial drawing of the scoreboard - 25 crosses,
-        // should not serve other purposes.
-        initialCrosses = document.createDocumentFragment();
+        // Document fragment is used for best performance.
+        // The 'crossFragment' is used as container for the first 25 crosses.
+        crossFragment = document.createDocumentFragment();
+        tickFragment = document.createDocumentFragment();
 
-        for (var i = 0; i < 25; i += 1) {
-            var cross = insertCross(10 + i * 30, 7);
-            initialCrosses.appendChild(cross);
+        // Drawing crosses, and storing them in crossFragment = document fragment.
+        // The crosses
+        // Using cloneNode for best optimization and performance.
+        for (var i = 0; i < 25 - eventCounter; i += 1) {
+            var cross = insertCross(733 - (i * 30), 7).cloneNode(true);
+            crossFragment.appendChild(cross);
         }
 
+        // The loop draws a tick each time the 'collectCoin' event is dispatched.
+        // the eventCounter variable increases in value in the event listener.
+        for (var i = 0; i < eventCounter; i += 1) {
+            var tick = (insertTick(10 + i * 30, 6)).cloneNode(true);
+            tickFragment.appendChild(tick);
+        }
+
+
         containerForScoreBoardNumbersNodes = document.createDocumentFragment();
-        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, score));
+        containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardNumbers(scoreCounterXCoord, CONSTANTS.SCORECOUNTER_Y_COORD, +score));
         containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardNumbers(CONSTANTS.MAXIMUM_SCORE_X_COORD, CONSTANTS.MAXIMUM_SCORE_Y_COORD, '100'));
         containerForScoreBoardNumbersNodes.appendChild(drawScoreBoardForwardSlash());
-
         scoreNumbersDrawingBoard.appendChild(containerForScoreBoardNumbersNodes);
-        scoreIconsDrawingBoard.appendChild(initialCrosses);
 
-    }
+        scoreIconsDrawingBoard.appendChild(tickFragment);
+        scoreIconsDrawingBoard.appendChild(crossFragment);
+    };
+
 
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
     //TODO: Second  raw of bricks
