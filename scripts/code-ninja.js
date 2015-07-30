@@ -1,14 +1,27 @@
 var mainGame = function () {
-    function collides(a, b) {
-        return a.x < b.x + b.width &&
-            a.x + a.width > b.x &&
-            a.y < b.y + b.height &&
-            a.y + a.height > b.y;
+    function checkIfNinjaOutOfMapBounds() {
+        //TODO: make ninja not go < 0 or > than map end
     }
 
-    function collidesWithPipes(ninja2, pipe) {
-        var output = pipe.some(function (item) {
-            return collides(ninja2, item);
+    function collides(a, b) {
+        return a.x < (b.getX() + b.getWidth()) &&
+            (a.x + a.width) > b.getX() &&
+            a.y < (b.getY() + b.getHeight()) &&
+            (a.y + a.height) > b.getY();
+    }
+
+    function collidesTop() {
+        //TODO: code it
+        return false;
+    }
+
+    function ninjaOnGround() {
+        return 400 === startY + (ninja.bottom - ninja.top) - 10;
+    }
+
+    function collidesWithPipes(ninja2) {
+        var output = pipes.some(function (pipe) {
+            return collides(ninja2, pipe);
         });
 
         //var output =  pipe.some(function (item) {
@@ -42,6 +55,38 @@ var mainGame = function () {
 
         return;
     }
+
+    function makeNinjaJump(isJumpingNow) {
+        if(isJumpingNow) {
+            walkingNinjaContent = generateWalkingNinja();
+            jumpingNinjaContent = generateJumpingNinja();
+            //if(!(ninjaOnGround()) && !(collidesTop())) {
+            if (!(collidesTop())) {
+                //TODO: draw ninja, reasign y and call animation again
+                jumpingNinjaLayer.draw();
+                startY -= 10;
+
+
+                if (ninjaYBeforeJump - CONSTANTS.NINJA_JUMP_HEIGHT < startY) {
+                    isJumping = true;
+                }
+                else {
+                    isJumping = false;
+                }
+            }
+        }
+    }
+
+    //function ninjaGravityAnimation(){
+    //    if (!ninjaOnGround() && !collidesWithPipes({x: startX,
+    //                y: startY,
+    //                width: (ninja.right - ninja.left),
+    //                height: (ninja.bottom - ninja.top)},
+    //            pipeShapesArray)) {
+    //        startY += 10;
+    //
+    //    }
+    //}
 
     //function drawSky() {
     //    var sky = new Kinetic.Rect({
@@ -1449,6 +1494,7 @@ var mainGame = function () {
         ],
         ninjaX = 250,
         ninjaY = 300,
+        ninjaYBeforeJump,
         newSword, newSwordDecoration, newFaceWalkingNinja, newBodyWalkingNinja, newLogoWalkingNinja,
         newLeftEyebrowWalkingNinja, newRightEyebrowWalkingNinja, newCloak, newHeadJumpingNinja,
         newFaceJumpingNinja, newBodyJumpingNinja, newArmJumpingNinja, newLogoJumpingNinja,
@@ -1474,8 +1520,6 @@ var mainGame = function () {
         right: 400,
         bottom: 400,
         left: 250,
-        x: startX,
-        y: startY,
         width: 150,
         height: 100,
         walk: function () {
@@ -1515,38 +1559,37 @@ var mainGame = function () {
         console.log(ev.keyCode);
         switch (ev.keyCode) {
             case 37:
-                ninja.x = startX;
-                ninja.y = startY;
                 startX = startX - 50;
-                if (!checkForLeftCollision()) {
+                if (!collidesWithPipes({x: startX,
+                                        y: startY,
+                                        width: (ninja.right - ninja.left),
+                                        height: (ninja.bottom - ninja.top)
+                                        })) {
                     updateX = 1;
+                } else {
+                    startX += 50;
                 }
-                updateX = 1;
-                //if (!collidesWithPipes(ninja, pipeShapesArray)) {
-                //    update = 1;
-                //}
-                //runGravity(ninja);
                 break; // left
-            case 38:
-                ninja.x = startX;
-                ninja.y = startY;
-                if (!isJumping) {
-                    updateNinja = -50;
-                }
-                //runGravity(ninja);
-                break; //up
+            //case 38:
+            //    if (!isJumping) {
+            //        isJumping = true;
+            //        ninjaYBeforeJump = startY;
+            //        startY = -10;
+            //        //makeNinjaJump();
+            //        //isJumping = false;
+            //    }
+            //    break; //up
             case 39:
-                ninja.x = startX;
-                ninja.y = startY;
                 startX = startX + 50;
-                if (!checkForRightCollision()) {
+                if (!collidesWithPipes({x: startX,
+                        y: startY,
+                        width: (ninja.right - ninja.left),
+                        height: (ninja.bottom - ninja.top)
+                    })) {
                     updateX = -1;
+                } else {
+                    startX -= 50;
                 }
-                updateX = -1;
-                //if (!collidesWithPipes(ninja, pipeShapesArray)) {
-                //    update = -3;
-                //}
-                //runGravity(ninja);
                 break; // right
         }
 
@@ -1564,74 +1607,74 @@ var mainGame = function () {
             //return; //TODO: Why return
         }
 
-        if (!!updateNinja) {
-            var originalPos = {
-                    x: startX,
-                    y: startY
-                },
-                updatex = 0,
-                updatey = -25;
-            //if (jumpingShapes.indexOf(originalPos) >= 0) {
-            //    return;
-            //}
-            //jumpingShapes.push(originalPos);
-            function performJump() {
-                //stage.destroyChildren();
-                isJumping = true;
-                layer = new Kinetic.Layer();
-                drawLandscape();
-
-                stage.add(layer);
-                ninjaLayer = new Kinetic.Layer();
-                //if (originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT > startY) {
-                //    updatey *= -1;
-                //}
-
-                startY += updatey;
-
-                calculateNinjaNewCoordinates();
-
-                //ninja.jump();
-
-
-                ninja.x = startX;
-                ninja.y = startY;
-                ninja.jump();
-                stage.add(ninjaLayer);
-                if ((originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT <= startY) && !collidesWithPipes(ninja, pipeShapesArray)) {
-                    ninjaLayer = new Kinetic.Layer();
-                    requestAnimationFrame(performJump);
-                } else {
-
-                    isJumping = false;
-                }
-
-            }
-
-            layer = new Kinetic.Layer();
-
-            //drawLandscape();
-            //stage.add(layer);
-
-            stage.add(enemiesLayer);
-            ninjaLayer = new Kinetic.Layer();
-            startY += updateNinja;
-
-            //isJumping = true;
-            performJump();
-            ninja.x = startX;
-            ninja.y = startY;
-            calculateNinjaNewCoordinates();
-            runGravity(ninja);
-            //isJumping = false;
-            //runGravity(ninja);
-            //calculateNinjaNewCoordinates();
-            //ninja.jump();
-            /*return*/ stage.add(ninjaLayer);
-            ninja.y = startY;
-            //runGravity(ninja);
-            //return; //TODO: Why return
-        }
+        //if (!!updateNinja) {
+        //    var originalPos = {
+        //            x: startX,
+        //            y: startY
+        //        },
+        //        updatex = 0,
+        //        updatey = -25;
+        //    //if (jumpingShapes.indexOf(originalPos) >= 0) {
+        //    //    return;
+        //    //}
+        //    //jumpingShapes.push(originalPos);
+        //    function performJump() {
+        //        //stage.destroyChildren();
+        //        isJumping = true;
+        //        layer = new Kinetic.Layer();
+        //        drawLandscape();
+        //
+        //        stage.add(layer);
+        //        ninjaLayer = new Kinetic.Layer();
+        //        //if (originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT > startY) {
+        //        //    updatey *= -1;
+        //        //}
+        //
+        //        startY += updatey;
+        //
+        //        calculateNinjaNewCoordinates();
+        //
+        //        //ninja.jump();
+        //
+        //
+        //        ninja.x = startX;
+        //        ninja.y = startY;
+        //        ninja.jump();
+        //        stage.add(ninjaLayer);
+        //        if ((originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT <= startY) && !collidesWithPipes(ninja, pipeShapesArray)) {
+        //            ninjaLayer = new Kinetic.Layer();
+        //            requestAnimationFrame(performJump);
+        //        } else {
+        //
+        //            isJumping = false;
+        //        }
+        //
+        //    }
+        //
+        //    layer = new Kinetic.Layer();
+        //
+        //    //drawLandscape();
+        //    //stage.add(layer);
+        //
+        //    stage.add(enemiesLayer);
+        //    ninjaLayer = new Kinetic.Layer();
+        //    startY += updateNinja;
+        //
+        //    //isJumping = true;
+        //    performJump();
+        //    ninja.x = startX;
+        //    ninja.y = startY;
+        //    calculateNinjaNewCoordinates();
+        //    runGravity(ninja);
+        //    //isJumping = false;
+        //    //runGravity(ninja);
+        //    //calculateNinjaNewCoordinates();
+        //    //ninja.jump();
+        //    /*return*/ stage.add(ninjaLayer);
+        //    ninja.y = startY;
+        //    //runGravity(ninja);
+        //    //return; //TODO: Why return
+        //}
 
         //runGravity(ninja);
         //return; //TODO: Why return
@@ -1781,6 +1824,7 @@ var mainGame = function () {
     //TODO: Second  raw of bricks
 
     enemyAnimation();
+    makeNinjaJump(isJumping);
 
     //function anim() {
     //    //stage.destroyChildren();
@@ -1807,6 +1851,6 @@ var mainGame = function () {
 
     stage.add(layer);
     stage.add(walkingNinjaLayer);
-    //stage.add(jumpingNinjaLayer);
+    stage.add(jumpingNinjaLayer);
     stage.add(enemiesLayer);
 };
