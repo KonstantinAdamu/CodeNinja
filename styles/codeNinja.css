@@ -1,15 +1,15 @@
 body {
-    padding: 50px;
-    background: #9CDE23 url(../images/Untitled.png) no-repeat;
+    background: #9CDE23 url(../images/NinjaBackground.png) no-repeat;
 }
 
 #container {
-    border: 5px outset black;
+    position: absolute;
     width: 1200px;
     height: 500px;
-    top: 105px;
-    left:95px;
-    position: absolute;
+    top: 115px;
+    left: 100px;
+    border: 5px outset black;
+    display: none;
 }
 
 #scoreBoardSvg {
@@ -20,7 +20,9 @@ body {
     border-style: inset;
     border-color: white;
     border-width: 5px;
+    display: none;
 }
+
 #scoreCounterSvg {
     position: absolute;
     left: 1050px;
@@ -29,4 +31,34 @@ body {
     border-style: inset;
     border-color: white;
     border-width: 5px;
+    display: none;
+}
+
+#start-menu {
+
+    position: absolute;
+    left: 470px;
+    top: 70px;
+    width: 550px;
+    height: 480px;
+    background-color: rgba(0, 150, 0, 0.7);
+    border-radius: 55px;
+    text-align: center;
+}
+
+.button {
+    margin-top: 50px;
+    width: 350px;
+    height: 50px;
+    background-color: forestgreen;
+    border: 2px solid seagreen;
+    border-radius: 10px;
+    display: inline-block;
+    font-family: 'Arial', sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    color: whitesmoke;
+    line-height: 50px;
+    vertical-align: middle;
+
 }

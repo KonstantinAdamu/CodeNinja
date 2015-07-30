@@ -1,4 +1,4 @@
-window.onload = function () {
+var mainGame = function () {
     function collides(a, b) {
         return a.x < b.x + b.width &&
             a.x + a.width > b.x &&
