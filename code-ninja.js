@@ -3,13 +3,12 @@ window.onload = function () {
         return a.x < b.x + b.width &&
             a.x + a.width > b.x &&
             a.y < b.y + b.height &&
-            a.y + a.height > b.y
-            ;
+            a.y + a.height > b.y;
     }
 
-    function collidesWithPipes(ninja, pipe) {
+    function collidesWithPipes(ninja2, pipe) {
         var output = pipe.some(function (item) {
-            return collides(ninja, item);
+            return collides(ninja2, item);
         });
 
         //var output =  pipe.some(function (item) {
@@ -18,6 +17,30 @@ window.onload = function () {
         //});
         //console.log(pipe);
         return output;
+    }
+
+    function runGravity(ninja) {
+        if (ninja.y + ninja.height <= 360||
+        !collidesWithPipes(ninja, pipeShapesArray)) {
+            //stage.destroyChildren();
+            layer = new Kinetic.Layer();
+            drawLandscape();
+
+            stage.add(layer);
+
+            ninjaLayer = new Kinetic.Layer();
+            startY += 25;
+            ninja.y = startY;
+            calculateNinjaNewCoordinates();
+
+            ninja.jump();
+            ninja.y = startY;
+            stage.add(ninjaLayer);
+
+            requestAnimationFrame(runGravity);
+        }
+
+        return;
     }
 
     function drawSky() {
@@ -520,21 +543,21 @@ window.onload = function () {
         })
     }
 
-    function checkForLeftCollision() {
-        var isInColliseWithPipe = pipesInScreenCoordinates.some(function (coord) {
-            return ninja.left / 50 === coord + 2 && ninja.bottom >= CONSTANTS.GROUND_HEIGHT - 165;
-        });
-
-        return isInColliseWithPipe;
-    }
-
-    function checkForRightCollision() {
-        var isInColliseWithPipe = pipesInScreenCoordinates.some(function (coord) {
-            return ninja.right / 50 === coord && ninja.bottom >= CONSTANTS.GROUND_HEIGHT - 165;
-        });
-
-        return isInColliseWithPipe;
-    }
+    //function checkForLeftCollision() {
+    //    var isInColliseWithPipe = pipesInScreenCoordinates.some(function (coord) {
+    //        return ninja.left / 50 === coord + 2 && ninja.bottom >= CONSTANTS.GROUND_HEIGHT - 165;
+    //    });
+    //
+    //    return isInColliseWithPipe;
+    //}
+    //
+    //function checkForRightCollision() {
+    //    var isInColliseWithPipe = pipesInScreenCoordinates.some(function (coord) {
+    //        return ninja.right / 50 === coord && ninja.bottom >= CONSTANTS.GROUND_HEIGHT - 165;
+    //    });
+    //
+    //    return isInColliseWithPipe;
+    //}
 
     function drawWalkingNinja() {
         //calculateNinjaNewCoordinates();
@@ -884,6 +907,8 @@ window.onload = function () {
         left: 250,
         x: startX,
         y: startY,
+        width: 150,
+        height: 100,
         walk: function () {
             return drawWalkingNinja();
         },
@@ -906,25 +931,33 @@ window.onload = function () {
         console.log(ev.keyCode);
         switch (ev.keyCode) {
             case 37:
-                //startX = startX - 50;
-                if (!collidesWithPipes({x: startX, y: startY, width: 150, height: 100}, pipeShapesArray)) {
+                ninja.x = startX;
+                ninja.y = startY;
+                if (!collidesWithPipes(ninja, pipeShapesArray)) {
                     update = 1;
                 }
+                //runGravity(ninja);
                 break; // left
             case 38:
-
+                ninja.x = startX;
+                ninja.y = startY;
                 if (!isJumping) {
                     updateNinja = -50;
-                    //jumpingShapes = [];
                 }
+                //runGravity(ninja);
                 break;
             case 39:
-                if (!collidesWithPipes({x: startX, y: startY, width: 150, height: 100}, pipeShapesArray)) {
-                    update = -2;
+                ninja.x = startX;
+                ninja.y = startY;
+                if (!collidesWithPipes(ninja, pipeShapesArray)) {
+                    update = -3;
                 } //right
+                //runGravity(ninja);
+                break;
         }
 
         if (!!update) {
+            //stage.clear();
             layer = new Kinetic.Layer();
 
             calculateNewCoordinates(update);
@@ -936,13 +969,22 @@ window.onload = function () {
             }
 
             drawLandscape();
+
             stage.add(layer);
             stage.add(enemiesLayer);
             ninjaLayer = new Kinetic.Layer();
             //stage.add(layer)
 
             ninja.walk();
-            return stage.add(ninjaLayer);
+            runGravity(ninja);
+            ninja.x = startX;
+            ninja.y = startY;
+
+            //runGravity(ninja);
+            stage.add(ninjaLayer);
+
+            //runGravity(ninja);
+            return;
         }
         if (!!updateNinja) {
             var originalPos = {
@@ -956,29 +998,29 @@ window.onload = function () {
             //}
             //jumpingShapes.push(originalPos);
             function performJump() {
+                //stage.destroyChildren();
                 isJumping = true;
                 layer = new Kinetic.Layer();
                 drawLandscape();
+
                 stage.add(layer);
                 ninjaLayer = new Kinetic.Layer();
-                if (originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT > startY) {
-                    updatey *= -1;
-                }
+                //if (originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT > startY) {
+                //    updatey *= -1;
+                //}
 
                 startY += updatey;
 
                 calculateNinjaNewCoordinates();
 
+                //ninja.jump();
+
+
+                ninja.x = startX;
+                ninja.y = startY;
                 ninja.jump();
                 stage.add(ninjaLayer);
-
-                if (originalPos.y > startY && !collidesWithPipes({
-                        x: startX,
-                        y: startY,
-                        width: 150,
-                        height: 150
-                    }, pipeShapesArray)) {
-
+                if ((originalPos.y - CONSTANTS.NINJA_JUMP_HEIGHT <= startY) && !collidesWithPipes(ninja, pipeShapesArray)) {
                     ninjaLayer = new Kinetic.Layer();
                     requestAnimationFrame(performJump);
                 } else {
@@ -990,21 +1032,32 @@ window.onload = function () {
 
             layer = new Kinetic.Layer();
 
-            drawLandscape();
+            //drawLandscape();
+            //stage.add(layer);
 
-            stage.add(layer);
             stage.add(enemiesLayer);
             ninjaLayer = new Kinetic.Layer();
             startY += updateNinja;
 
             //isJumping = true;
             performJump();
+            ninja.x = startX;
+            ninja.y = startY;
+            calculateNinjaNewCoordinates();
+            runGravity(ninja);
             //isJumping = false;
-
+            //runGravity(ninja);
             //calculateNinjaNewCoordinates();
             //ninja.jump();
-            return stage.add(ninjaLayer);
+            /*return*/ stage.add(ninjaLayer);
+            ninja.y = startY;
+            //runGravity(ninja);
+            return;
         }
+        //runGravity(ninja);
+        return;
+
+
     });
 
     function drawScoreBoard() {
@@ -1140,6 +1193,7 @@ window.onload = function () {
     //TODO: Implement bonusJS for special bricks
 
     function anim() {
+        //stage.destroyChildren();
         layer = new Kinetic.Layer();
         ninjaLayer = new Kinetic.Layer();
         enemiesLayer = new Kinetic.Layer();
@@ -1150,11 +1204,15 @@ window.onload = function () {
         drawScoreBoard();
         drawLandscape();
 
-        setTimeout(anim, 1500);
-
         ninja.walk();
+
         stage.add(layer);
         stage.add(enemiesLayer);
+        setTimeout(anim, 1500);
+
+
+
+
         return stage.add(ninjaLayer);
     }
 
