@@ -674,33 +674,67 @@ var mainGame = function () {
         return result;
     }
 
-    function generateEnemies(enemyCoordinates) {
-        var i,
-            len,
-            startX,
-            y = CONSTANTS.GROUND_HEIGHT - 50,
-            result = [],
-            enemy;
+    //function generateEnemies(enemyCoordinates) {
+    //    var i,
+    //        len,
+    //        startX,
+    //        y = CONSTANTS.GROUND_HEIGHT - 50,
+    //        result = [],
+    //        enemy;
+    //
+    //    for (i = 0, len = enemyCoordinates.length; i < len; i += 1) {
+    //        startX = enemyCoordinates[i] * CONSTANTS.GROUND_CELL_WIDTH;
+    //
+    //        enemy = new Kinetic.Rect({
+    //            x: startX,
+    //            y: y,
+    //            width: 50,
+    //            height: 50,
+    //            fill: 'black',
+    //            stroke: 'blue'
+    //        });
+    //        enemy.updateX = CONSTANTS.GROUND_CELL_WIDTH;
+    //
+    //        enemiesLayer.add(enemy);
+    //        result.push(enemy);
+    //    }
+    //
+    //    return result;
+    //}
 
-        for (i = 0, len = enemyCoordinates.length; i < len; i += 1) {
-            startX = enemyCoordinates[i] * CONSTANTS.GROUND_CELL_WIDTH;
-
-            enemy = new Kinetic.Rect({
-                x: startX,
-                y: y,
-                width: 50,
-                height: 50,
-                fill: 'black',
-                stroke: 'blue'
-            });
-            enemy.updateX = CONSTANTS.GROUND_CELL_WIDTH;
-
-            enemiesLayer.add(enemy);
-            result.push(enemy);
-        }
-
-        return result;
-    }
+    //function generateEnemies(enemyCoordinates) {
+    //    var i,
+    //        len,
+    //        startX,
+    //        y = CONSTANTS.GROUND_HEIGHT - 50,
+    //        result = [],
+    //        yoda;
+    //
+    //    var imageObj = new Image();
+    //
+    //    for (i = 0, len = enemyCoordinates.length; i < len; i += 1) {
+    //        startX = enemyCoordinates[i] * CONSTANTS.GROUND_CELL_WIDTH;
+    //
+    //        imageObj.onload = function() {
+    //            yoda = new Kinetic.Image({
+    //                x: 50,
+    //                y: 150,
+    //                image: imageObj,
+    //                width: 150,
+    //                height: 50
+    //            });
+    //
+    //            // add the shape to the layer
+    //            enemiesLayer.add(yoda);
+    //            result.push(yoda);
+    //
+    //            // add the layer to the stage
+    //        };
+    //        imageObj.src = 'images/Doncho.jpg';
+    //    }
+    //
+    //    return result;
+    //}
 
     function generateWalkingNinja() {
         var result = [],
@@ -1212,19 +1246,26 @@ var mainGame = function () {
         });
     }
 
-    function enemyAnimation() {
-        enemies.map(function(enemy) {
-
-            if (checkEnemyForLeftCollision(enemy) || checkEnemyForRightCollision(enemy)) {
-                enemy.updateX *= -1;
-            }
-
-            enemy.setX(enemy.getX() + enemy.updateX);
-            return enemy;
+    function showWalkingNinjaLayer() {
+        walkingNinjaContent.map(function(obj) {
+            obj.opacity(1);
+            return obj;
         });
+        jumpingNinjaContent.map(function(obj) {
+            obj.opacity(0);
+            return obj;
+        });
+    }
 
-        enemiesLayer.draw();
-        setTimeout(enemyAnimation, 500);
+    function showJumpingNinjaLayer() {
+        walkingNinjaContent.map(function(obj) {
+            obj.opacity(0);
+            return obj;
+        });
+        jumpingNinjaContent.map(function(obj) {
+            obj.opacity(1);
+            return obj;
+        });
     }
 
     //Depricated funcitons
@@ -1279,7 +1320,7 @@ var mainGame = function () {
         jumpingNinjaLayer,
         ninjaLayer,
         enemiesLayer,
-        enemies,
+        enemies = [],
         sky,
         bigDarkBushes,
         smallDarkBushes,
@@ -1546,10 +1587,80 @@ var mainGame = function () {
     downStairs = generateDownStairs(CONSTANTS.INITIAL_DOWNSTAIRS_COORDINATES);
     bonusCodes = generateBonusCodes(CONSTANTS.INITIAL_TEXT_COORDINATES);
     ground = generateGround();
-    enemies = generateEnemies(CONSTANTS.INITIAL_ENEMIES_COORDINATES);
+    //enemies = generateEnemies(CONSTANTS.INITIAL_ENEMIES_COORDINATES);
 
     walkingNinjaContent = generateWalkingNinja();
     jumpingNinjaContent = generateJumpingNinja();
+
+    var imageObj = new Image();
+    imageObj.onload = function() {
+        var i,
+            len,
+            startX,
+            y = CONSTANTS.GROUND_HEIGHT - 50,
+            donchoCoordinates = [0, 0, 50, 50],
+            evlogiCoordinates = [100, 0, 50, 50],
+            ivoCoordinates = [0, 100, 50, 50],
+            nikiCoordinates = [100, 100, 50, 50],
+            currentImageCoordinates,
+            enemy;
+
+        for (i = 0, len = CONSTANTS.INITIAL_ENEMIES_COORDINATES.length; i < len; i += 1) {
+            startX = CONSTANTS.INITIAL_ENEMIES_COORDINATES[i] * CONSTANTS.GROUND_CELL_WIDTH;
+
+            switch (i%4) {
+                case 0:
+                    currentImageCoordinates = donchoCoordinates;
+                    break;
+                case 1:
+                    currentImageCoordinates = evlogiCoordinates;
+                    break;
+                case 2:
+                    currentImageCoordinates = ivoCoordinates;
+                    break;
+                case 3:
+                    currentImageCoordinates = nikiCoordinates;
+                    break;
+                default:
+                    currentImageCoordinates = donchoCoordinates;
+            }
+
+            enemy = new Kinetic.Sprite({
+                x: startX,
+                y: y,
+                image: imageObj,
+                animation: 'idle',
+                animations: {
+                    idle: currentImageCoordinates
+                },
+                frameRate: 5,
+                frameIndex: 0
+            });
+            enemy.updateX = CONSTANTS.GROUND_CELL_WIDTH;
+
+            enemies.push(enemy);
+            enemiesLayer.add(enemy);
+        }
+
+        function enemyAnimation() {
+            enemies.map(function(enemy) {
+
+                if (checkEnemyForLeftCollision(enemy) || checkEnemyForRightCollision(enemy)) {
+                    enemy.updateX *= -1;
+                }
+
+                enemy.setX(enemy.getX() + enemy.updateX);
+                return enemy;
+            });
+
+            enemiesLayer.draw();
+            setTimeout(enemyAnimation, 500);
+        }
+
+        enemyAnimation()
+
+    };
+    imageObj.src = 'images/trainers-sprite.png';
 
     var event = new CustomEvent('collectCoin');
 
@@ -1598,7 +1709,7 @@ var mainGame = function () {
                 break; // right
         }
 
-        makeNinjaJump(isJumping);
+        //makeNinjaJump(isJumping);
 
         if (!!updateX) {
             moveStaticObjects(updateX);
@@ -1824,13 +1935,10 @@ var mainGame = function () {
 
         scoreIconsDrawingBoard.appendChild(tickFragment);
         scoreIconsDrawingBoard.appendChild(crossFragment);
-    };
-
+    }
 
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
     //TODO: Second  raw of bricks
-
-    enemyAnimation();
 
 
     //setTimeout(makeNinjaJump(isJumping), 100);
@@ -1864,6 +1972,4 @@ var mainGame = function () {
     stage.add(walkingNinjaLayer);
     stage.add(jumpingNinjaLayer);
     stage.add(enemiesLayer);
-
-
 };
