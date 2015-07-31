@@ -32,47 +32,51 @@ var mainGame = function () {
         return output;
     }
 
-    function runGravity(ninja) {
-        if (ninja.y + ninja.height <= 360||
-        !collidesWithPipes(ninja, pipeShapesArray)) {
-            //stage.destroyChildren();
-            layer = new Kinetic.Layer();
-            drawLandscape();
+    //function runGravity(ninja) {
+    //    if (ninja.y + ninja.height <= 360||
+    //    !collidesWithPipes(ninja, pipeShapesArray)) {
+    //        //stage.destroyChildren();
+    //        layer = new Kinetic.Layer();
+    //        drawLandscape();
+    //
+    //        stage.add(layer);
+    //
+    //        ninjaLayer = new Kinetic.Layer();
+    //        startY += 25;
+    //        ninja.y = startY;
+    //        calculateNinjaNewCoordinates();
+    //
+    //        ninja.jump();
+    //        ninja.y = startY;
+    //        stage.add(ninjaLayer);
+    //
+    //        requestAnimationFrame(runGravity);
+    //    }
+    //
+    //    return;
+    //}
 
-            stage.add(layer);
-
-            ninjaLayer = new Kinetic.Layer();
-            startY += 25;
-            ninja.y = startY;
-            calculateNinjaNewCoordinates();
-
-            ninja.jump();
-            ninja.y = startY;
-            stage.add(ninjaLayer);
-
-            requestAnimationFrame(runGravity);
-        }
-
-        return;
-    }
-
-    function makeNinjaJump(isJumpingNow) {
-        if(isJumpingNow) {
-            walkingNinjaContent = generateWalkingNinja();
-            jumpingNinjaContent = generateJumpingNinja();
-            //if(!(ninjaOnGround()) && !(collidesTop())) {
-            if (!(collidesTop())) {
-                //TODO: draw ninja, reasign y and call animation again
-                jumpingNinjaLayer.draw();
-                startY -= 10;
+    function makeNinjaJump() {
+        walkingNinjaContent = generateWalkingNinja();
+        jumpingNinjaContent = generateJumpingNinja();
+        console.log(walkingNinjaContent);
+        console.log(jumpingNinjaContent);
+        //if(!(ninjaOnGround()) && !(collidesTop())) {
+        if (!(collidesTop())) {
+            //TODO: draw ninja, reasign y and call animation again
+            moveStaticObjects(0);
+            //layer.draw();
+            enemiesLayer.draw();
+            jumpingNinjaLayer.draw();
+            walkingNinjaLayer.draw();
+            startY -= 10;
 
 
-                if (ninjaYBeforeJump - CONSTANTS.NINJA_JUMP_HEIGHT < startY) {
-                    isJumping = true;
-                }
-                else {
-                    isJumping = false;
-                }
+            if (ninjaYBeforeJump - CONSTANTS.NINJA_JUMP_HEIGHT < startY) {
+                //requestAnimationFrame(makeNinjaJump(isJumpingNow));
+                return;
+            } else {
+                isJumping = false;
             }
         }
     }
@@ -1570,15 +1574,16 @@ var mainGame = function () {
                     startX += 50;
                 }
                 break; // left
-            //case 38:
-            //    if (!isJumping) {
-            //        isJumping = true;
-            //        ninjaYBeforeJump = startY;
-            //        startY = -10;
-            //        //makeNinjaJump();
-            //        //isJumping = false;
-            //    }
-            //    break; //up
+            case 38:
+                if (!isJumping) {
+                    isJumping = true;
+                    ninjaYBeforeJump = startY;
+                    startY = -10;
+
+                    //makeNinjaJump();
+                    //isJumping = false;
+                }
+                break; //up
             case 39:
                 startX = startX + 50;
                 if (!collidesWithPipes({x: startX,
@@ -1592,6 +1597,8 @@ var mainGame = function () {
                 }
                 break; // right
         }
+
+        makeNinjaJump(isJumping);
 
         if (!!updateX) {
             moveStaticObjects(updateX);
@@ -1824,7 +1831,9 @@ var mainGame = function () {
     //TODO: Second  raw of bricks
 
     enemyAnimation();
-    makeNinjaJump(isJumping);
+
+
+    //setTimeout(makeNinjaJump(isJumping), 100);
 
     //function anim() {
     //    //stage.destroyChildren();
@@ -1848,9 +1857,13 @@ var mainGame = function () {
     //}
     //
     //anim();
-
+    if(isJumping) {
+        makeNinjaJump();
+    }
     stage.add(layer);
     stage.add(walkingNinjaLayer);
     stage.add(jumpingNinjaLayer);
     stage.add(enemiesLayer);
+
+
 };
