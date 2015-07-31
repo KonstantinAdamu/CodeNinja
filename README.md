@@ -1,5 +1,8 @@
 ﻿# CodeNinja
 An exciting game dedicated to all Telerik Ninjas (JS UI Paradise team)
+## Game description
+Code Ninja is like Super Mario, but in the world of Software Academy of Telerik. To play the game you have to move in direction by keyboard keys. To collect the js code parts placed in bricks, and to reach 100% code in bgcoder console.
+You have to avoid the trainers, because they lower your points.
 
 
 
