@@ -12,18 +12,23 @@ var mainGame = function () {
 
     function collidesWithBricks(ninja) {
         //TODO: code it
-        var ifCollideWithRegularBricks = regularBricks.some(function(brick) {
+        var ifCollideWithRegularBricks = regularBricks.some(function (brick) {
             return collides(ninja, brick);
         });
-        var ifCollideWithSpecialBricks = specialBricks.some(function(brick){
+        var ifCollideWithSpecialBricks = specialBricks.some(function (brick) {
             return collides(ninja, brick);
-        })
+        });
 
         return (ifCollideWithRegularBricks || ifCollideWithSpecialBricks);
     }
 
+    function collidesTop() {
+        //TODO: code it
+        return false;
+    }
+
     function ninjaOnGround() {
-        return startY + (ninja.bottom - ninja.top) < 400;
+        return 400 === startY + (ninja.bottom - ninja.top) - 10;
     }
 
     function collidesWithPipes(ninja2) {
@@ -31,459 +36,34 @@ var mainGame = function () {
             return collides(ninja2, pipe);
         });
 
-        //var output =  pipe.some(function (item) {
-        //    return ninja.x + ninja.width > item.x &&
-        //        item.y > (ninja.y + ninja.height);
-        //});
-        //console.log(pipe);
+
         return output;
     }
 
-    //function runGravity(ninja) {
-    //    if (ninja.y + ninja.height <= 360||
-    //    !collidesWithPipes(ninja, pipeShapesArray)) {
-    //        //stage.destroyChildren();
-    //        layer = new Kinetic.Layer();
-    //        drawLandscape();
-    //
-    //        stage.add(layer);
-    //
-    //        ninjaLayer = new Kinetic.Layer();
-    //        startY += 25;
-    //        ninja.y = startY;
-    //        calculateNinjaNewCoordinates();
-    //
-    //        ninja.jump();
-    //        ninja.y = startY;
-    //        stage.add(ninjaLayer);
-    //
-    //        requestAnimationFrame(runGravity);
-    //    }
-    //
-    //    return;
-    //}
-
     function makeNinjaJump() {
-
-        //if(!(ninjaOnGround()) && !(collidesWithBricks())) {
-        if (isJumping && !(collidesWithBricks({x: startX,
-                y: startY,
-                width: (ninja.right - ninja.left),
-                height: (ninja.bottom - ninja.top)
-            }))) {
-            walkingNinjaContent = generateWalkingNinja();
-            jumpingNinjaContent = generateJumpingNinja();
-            console.log(walkingNinjaContent);
-            console.log(jumpingNinjaContent);
+        walkingNinjaContent = generateWalkingNinja();
+        jumpingNinjaContent = generateJumpingNinja();
+        console.log(walkingNinjaContent);
+        console.log(jumpingNinjaContent);
+        //if(!(ninjaOnGround()) && !(collidesTop())) {
+        if (!(collidesTop())) {
             //TODO: draw ninja, reasign y and call animation again
             moveStaticObjects(0);
-            layer.draw();
+            //layer.draw();
             enemiesLayer.draw();
             jumpingNinjaLayer.draw();
             walkingNinjaLayer.draw();
             startY -= 10;
 
 
-            if (ninjaYBeforeJump - CONSTANTS.NINJA_JUMP_HEIGHT >= startY) {
+            if (ninjaYBeforeJump - CONSTANTS.NINJA_JUMP_HEIGHT < startY) {
                 //requestAnimationFrame(makeNinjaJump(isJumpingNow));
-                isJumping = false;
-
-            } else {
                 return;
+            } else {
+                isJumping = false;
             }
         }
     }
-
-    function ninjaGravityAnimation(){
-        //TODO: make ninja fall when not on grownd and in collision with bricks from down - done?
-        //TODO: make ninja not fall when in collision with bricks but above bricks y - done?
-        if(!ninjaOnGround() && startY + (ninja.bottom - ninja.top) <= CONSTANTS.FIRST_RAW_BRICK_HEIGHT && (collidesWithBricks({x: startX,
-                y: startY,
-                width: (ninja.right - ninja.left),
-                height: (ninja.bottom - ninja.top)
-            })) {
-            //TODO: return a.k.a. don't gravity
-            return;
-        }
-
-        if (!ninjaOnGround() && !isJumping && !collidesWithPipes({x: startX,
-                    y: startY,
-                    width: (ninja.right - ninja.left),
-                    height: (ninja.bottom - ninja.top)}
-            )) {
-            startY += 10;
-            walkingNinjaContent = generateWalkingNinja();
-            jumpingNinjaContent = generateJumpingNinja();
-            console.log(walkingNinjaContent);
-            console.log(jumpingNinjaContent);
-            //TODO: draw ninja, reasign y and call animation again
-            moveStaticObjects(0);
-            layer.draw();
-            enemiesLayer.draw();
-            jumpingNinjaLayer.draw();
-            walkingNinjaLayer.draw();
-        }
-
-    }
-
-    //function drawSky() {
-    //    var sky = new Kinetic.Rect({
-    //        x: CONSTANTS.MAP_START,
-    //        y: 0,
-    //        width: CONSTANTS.MAP_WIDTH,
-    //        height: CONSTANTS.MAP_HEIGHT,
-    //        fill: 'lightblue'
-    //    });
-    //
-    //    layer.add(sky);
-    //}
-    //
-    //function drawGround() {
-    //    var i,
-    //        len,
-    //        groundCell;
-    //
-    //    for (i = 0, len = CONSTANTS.MAP_WIDTH / CONSTANTS.GROUND_CELL_WIDTH; i < len; i += 1) {
-    //        groundCell = new Kinetic.Rect({
-    //            x: i * CONSTANTS.GROUND_CELL_WIDTH, // TODO: Check if Start is not at x=0
-    //            y: CONSTANTS.GROUND_HEIGHT,
-    //            width: CONSTANTS.GROUND_CELL_WIDTH,
-    //            height: CONSTANTS.GROUND_CELL_HEIGHT,
-    //            fill: '#EFE4B0',
-    //            stroke: '#B97A57'
-    //        });
-    //        layer.add(groundCell);
-    //
-    //        groundCell = new Kinetic.Rect({
-    //            x: i * CONSTANTS.GROUND_CELL_WIDTH, // TODO: Check if Start is not at x=0
-    //            y: CONSTANTS.GROUND_HEIGHT + CONSTANTS.GROUND_CELL_HEIGHT,
-    //            width: CONSTANTS.GROUND_CELL_WIDTH,
-    //            height: CONSTANTS.GROUND_CELL_HEIGHT,
-    //            fill: '#EFE4B0',
-    //            stroke: '#B97A57'
-    //        });
-    //        layer.add(groundCell);
-    //    }
-    //}
-    //
-    //function drawBigDarkBushes(startScreen, endScreen) {
-    //    var i,
-    //        len,
-    //        startingPoints = bigDarkBushesInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 5 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 5 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        y = CONSTANTS.GROUND_HEIGHT + 5,
-    //        darkBush;
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        darkBush = new Kinetic.Line({
-    //            points: [startX, y,
-    //                startX + 60, y - 80,
-    //                startX + 125, y - 120,
-    //                startX + 190, y - 80,
-    //                startX + 250, y],
-    //            stroke: 'black',
-    //            fill: '#22B14C',
-    //            strokeWidth: 2,
-    //            lineJoin: 'round',
-    //            closed: true,
-    //            tension: 0.3
-    //        });
-    //
-    //        layer.add(darkBush);
-    //    }
-    //}
-    //
-    //function drawSmallDarkBushes(startScreen, endScreen) {
-    //    var i,
-    //        len,
-    //        startingPoints = smallDarkBushesInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 3 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 3 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        y = CONSTANTS.GROUND_HEIGHT + 5,
-    //        darkBush;
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        darkBush = new Kinetic.Line({
-    //            points: [startX, y,
-    //                startX + 75, y - 60,
-    //                startX + 150, y],
-    //            stroke: 'black',
-    //            fill: '#22B14C',
-    //            strokeWidth: 2,
-    //            lineJoin: 'round',
-    //            closed: true,
-    //            tension: 0.4
-    //        });
-    //
-    //        layer.add(darkBush);
-    //    }
-    //}
-    //
-    //function drawBigLightBushes(startScreen, endScreen) {
-    //    var i,
-    //        len,
-    //        startingPoints = bigLightBushesInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 4 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 4 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        y = CONSTANTS.GROUND_HEIGHT + 5,
-    //        lightBush;
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        lightBush = new Kinetic.Line({
-    //            points: [startX, y,
-    //                startX + 25, y - 30,
-    //                startX + 50, y - 45,
-    //                startX + 75, y - 30,
-    //                startX + 100, y - 45,
-    //                startX + 125, y - 30,
-    //                startX + 150, y - 45,
-    //                startX + 175, y - 30,
-    //                startX + 200, y],
-    //            stroke: 'black',
-    //            fill: '#B5E61D',
-    //            strokeWidth: 2,
-    //            lineJoin: 'round',
-    //            closed: true,
-    //            tension: 0.35
-    //        });
-    //
-    //        layer.add(lightBush);
-    //    }
-    //}
-    //
-    //function drawSmallLightBushes(startScreen, endScreen) {
-    //    var i,
-    //        len,
-    //        startingPoints = smallLightBushesInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 2 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 2 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        y = CONSTANTS.GROUND_HEIGHT + 5,
-    //        lightBush;
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        lightBush = new Kinetic.Line({
-    //            points: [startX, y,
-    //                startX + 25, y - 30,
-    //                startX + 50, y - 45,
-    //                startX + 75, y - 30,
-    //                startX + 100, y],
-    //            stroke: 'black',
-    //            fill: '#B5E61D',
-    //            strokeWidth: 2,
-    //            lineJoin: 'round',
-    //            closed: true,
-    //            tension: 0.35
-    //        });
-    //
-    //        layer.add(lightBush);
-    //    }
-    //}
-    //
-    //function drawPipes(startScreen, endScreen) {
-    //    var i,
-    //        len,
-    //        startingPoints = pipesInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 2 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 2 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        y = CONSTANTS.GROUND_HEIGHT,
-    //        pipe;
-    //    pipeShapesArray = []; //TODO
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        pipe = new Kinetic.Rect({
-    //            x: startX,
-    //            y: y - 65,
-    //            width: 90,
-    //            height: 65,
-    //            stroke: 'black',
-    //            fill: '#B5E61D',
-    //            strokeWidth: 2
-    //        });
-    //        layer.add(pipe);
-    //        pipeShapesArray.push({x: pipe.getX(), y: pipe.getY(), width: pipe.getWidth(), height:
-    // pipe.getHeight()}); //TODO
-    //
-    //        pipe = new Kinetic.Rect({
-    //            x: startX - 5,
-    //            y: y - 100,
-    //            width: 100,
-    //            height: 35,
-    //            stroke: 'black',
-    //            fill: '#B5E61D',
-    //            strokeWidth: 2
-    //        });
-    //        layer.add(pipe);
-    //        pipeShapesArray.push({x: pipe.getX(), y: pipe.getY(), width: pipe.getWidth(), height:
-    // pipe.getHeight()}); //TODO
-    //    }
-    //}
-    //
-    //function drawSpecialBricks(startScreen, endScreen) {
-    //    var i,
-    //        len,
-    //        startingPoints = specialBricksInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 1 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 1 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        y = CONSTANTS.FIRST_RAW_BRICK_HEIGHT,
-    //        specialBrick;
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        specialBrick = new Kinetic.Rect({
-    //            x: startX,
-    //            y: y,
-    //            width: CONSTANTS.GROUND_CELL_WIDTH,
-    //            height: CONSTANTS.GROUND_CELL_HEIGHT,
-    //            stroke: 'black',
-    //            fill: 'red',
-    //            strokeWidth: 2
-    //        });
-    //        layer.add(specialBrick);
-    //    }
-    //}
-    //
-    //function drawRegularBricks(startScreen, endScreen) {
-    //    var i,
-    //        len,
-    //        startingPoints = regularBricksInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 1 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 1 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        y = CONSTANTS.FIRST_RAW_BRICK_HEIGHT,
-    //        regularBrick;
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        regularBrick = new Kinetic.Rect({
-    //            x: startX,
-    //            y: y,
-    //            width: CONSTANTS.GROUND_CELL_WIDTH,
-    //            height: CONSTANTS.GROUND_CELL_HEIGHT,
-    //            stroke: 'black',
-    //            fill: 'blue',
-    //            strokeWidth: 2
-    //        });
-    //        layer.add(regularBrick);
-    //    }
-    //}
-    //
-    //function drawUpStairs(startScreen, endScreen) {
-    //    var i,
-    //        j,
-    //        k,
-    //        len,
-    //        startingPoints = upstairsInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 4 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 4 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        stairsHeight = 4,
-    //        x,
-    //        y = CONSTANTS.GROUND_HEIGHT,
-    //        stairCell;
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        for (j = 1; j <= stairsHeight; j += 1) {
-    //            x = startX + ((j - 1) * CONSTANTS.GROUND_CELL_WIDTH);
-    //
-    //            for (k = 1; k <= j; k += 1) {
-    //                stairCell = new Kinetic.Rect({
-    //                    x: x,
-    //                    y: y - k * CONSTANTS.GROUND_CELL_HEIGHT,
-    //                    width: CONSTANTS.GROUND_CELL_WIDTH,
-    //                    height: CONSTANTS.GROUND_CELL_HEIGHT,
-    //                    stroke: 'black',
-    //                    fill: 'pink',
-    //                    strokeWidth: 2
-    //                });
-    //                layer.add(stairCell);
-    //            }
-    //        }
-    //
-    //    }
-    //}
-    //
-    //function drawDownStairs(startScreen, endScreen) {
-    //    var i,
-    //        j,
-    //        k,
-    //        len,
-    //        startingPoints = downstairsInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 4 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 4 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        stairsHeight = 4,
-    //        x,
-    //        y = CONSTANTS.GROUND_HEIGHT,
-    //        stairCell;
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        for (j = 1; j <= stairsHeight; j += 1) {
-    //            x = startX + ((stairsHeight - j) * CONSTANTS.GROUND_CELL_WIDTH);
-    //
-    //            for (k = 1; k <= j; k += 1) {
-    //                stairCell = new Kinetic.Rect({
-    //                    x: x,
-    //                    y: y - k * CONSTANTS.GROUND_CELL_HEIGHT,
-    //                    width: CONSTANTS.GROUND_CELL_WIDTH,
-    //                    height: CONSTANTS.GROUND_CELL_HEIGHT,
-    //                    stroke: 'black',
-    //                    fill: 'pink',
-    //                    strokeWidth: 2
-    //                });
-    //                layer.add(stairCell);
-    //            }
-    //        }
-    //
-    //    }
-    //}
-    //
-    //function drawText(startScreen, endScreen) {
-    //    var i,
-    //        len,
-    //        startingPoints = textInScreenCoordinates.filter(function (coord) {
-    //            return ((coord >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)) || (coord + 1 >= startScreen / CONSTANTS.GROUND_CELL_WIDTH && coord + 1 <= (endScreen / CONSTANTS.GROUND_CELL_WIDTH)));
-    //        }),
-    //        startX,
-    //        y = CONSTANTS.TEXT_HEIGHT - 50,
-    //        text;
-    //
-    //    for (i = 0, len = startingPoints.length; i < len; i += 1) {
-    //        startX = startingPoints[i] * CONSTANTS.GROUND_CELL_WIDTH;
-    //
-    //        text = new Kinetic.Text({
-    //            x: startX,
-    //            y: y + 10,
-    //            text: 'JS',
-    //            fontSize: 40,
-    //            fontFamily: 'Arial',
-    //            fill: '#A0F'
-    //        });
-    //        layer.add(text);
-    //    }
-    //}
 
     function drawNinjaPart(points, strokeColor, fillColor, tension) {
         var jumpingNinja = new Kinetic.Line({
@@ -624,8 +204,8 @@ var mainGame = function () {
 
     //TODO: To be checked
     function checkIfNinjaIsOnBonusCode() {
-        return textInScreenCoordinates.some(function (coord) {
-            return ninja.left / 50 === coord && ninja.bottom === CONSTANTS.FIRST_RAW_BRICK_HEIGHT;
+        return bonusCodes.some(function (enemy) {
+            return ninja.left === enemy.getX() && ninja.bottom === CONSTANTS.TEXT_HEIGHT;
         })
     }
 
@@ -1018,9 +598,9 @@ var mainGame = function () {
 
             pipe = new Kinetic.Rect({
                 x: startX,
-                y: y - 65,
+                y: y - 70,
                 width: 90,
-                height: 65,
+                height: 70,
                 stroke: 'black',
                 fill: '#B5E61D',
                 strokeWidth: 2
@@ -1302,6 +882,15 @@ var mainGame = function () {
         });
     }
 
+    function checkForCollisionWithBrickWhenJumping() {
+        var isCollideWithSpecialBricks = specialBricks.some(function(brick) {
+            return (brick.getY() + CONSTANTS.GROUND_CELL_WIDTH === ninja.top) && (brick.getX() >= ninja.left && brick.getX() <= ninja.right)
+        });
+
+        return isCollideWithSpecialBricks;
+    }
+
+
     //Depricated funcitons
 
     //function drawSingleEnemy(startX) {
@@ -1350,6 +939,7 @@ var mainGame = function () {
         ninja,
         walkingNinjaContent,
         jumpingNinjaContent,
+        jumpingNinjaContent,
         walkingNinjaLayer,
         jumpingNinjaLayer,
         ninjaLayer,
@@ -1371,13 +961,13 @@ var mainGame = function () {
             MAP_START: 0,
             MAP_END: 12000,
             MAP_WIDTH: 12000,
-            MAP_HEIGHT: 500,
+            MAP_HEIGHT: 800,
             SCREEN_WIDTH: 1200,
             GROUND_CELL_WIDTH: 50,
             GROUND_CELL_HEIGHT: 50,
-            GROUND_HEIGHT: 400,
-            TEXT_HEIGHT: 200, //TODO: 200
-            FIRST_RAW_BRICK_HEIGHT: 200,
+            GROUND_HEIGHT: 700,
+            TEXT_HEIGHT: 400, //TODO: 200
+            FIRST_RAW_BRICK_HEIGHT: 400,
             INITIAL_BIG_DARK_BUSHES_COORDINATES: [0, 49, 97, 147, 208],
             INITIAL_SMALL_DARK_BUSHES_COORDINATES: [17, 65, 113, 172],
             INITIAL_BIG_LIGHT_BUSHES_COORDINATES: [12, 61, 91, 141],
@@ -1390,7 +980,7 @@ var mainGame = function () {
             INITIAL_DOWNSTAIRS_COORDINATES: [143, 206],
             INITIAL_TEXT_COORDINATES: [17, 22, 24, 66, 67, 68, 89, 107, 110, 113, 131, 134, 157, 158, 159, 165, 166, 182, 184, 186],
             NINJA_START_X: 250,
-            NINJA_START_Y: 260,
+            NINJA_START_Y: 560,
             DELTA_X_HEAD: 15,
             NINJA_JUMP_HEIGHT: 150,
             ENEMIES_DIRECTION: 1
@@ -1595,12 +1185,14 @@ var mainGame = function () {
     enemiesLayer = new Kinetic.Layer();
 
     ninja = {
-        top: 250,
+        top: 550,
         right: 400,
-        bottom: 400,
+        bottom: 700,
         left: 250,
         width: 150,
         height: 100,
+        x: 250,
+        y: 400,
         walk: function () {
             return drawWalkingNinja();
         },
@@ -1622,10 +1214,16 @@ var mainGame = function () {
     bonusCodes = generateBonusCodes(CONSTANTS.INITIAL_TEXT_COORDINATES);
     ground = generateGround();
     //enemies = generateEnemies(CONSTANTS.INITIAL_ENEMIES_COORDINATES);
+    console.log(bonusCodes[0].getX());
+    console.log(ninja.bottom);
 
     walkingNinjaContent = generateWalkingNinja();
     jumpingNinjaContent = generateJumpingNinja();
 
+
+
+
+    //console.log('Brick' + specialBricks[0].getX() + specialBricks[0].getY());
     var imageObj = new Image();
     imageObj.onload = function() {
         var i,
@@ -1682,6 +1280,9 @@ var mainGame = function () {
                 if (checkEnemyForLeftCollision(enemy) || checkEnemyForRightCollision(enemy)) {
                     enemy.updateX *= -1;
                 }
+                if (enemy.getX() >= ninja.left && enemy.getX() <= enemy.right) {
+                    document.body.dispatchEvent(gameOverEvent);
+                }
 
                 enemy.setX(enemy.getX() + enemy.updateX);
                 return enemy;
@@ -1698,26 +1299,51 @@ var mainGame = function () {
 
     var event = new CustomEvent('collectCoin');
 
+    var gameOverEvent = new CustomEvent('gameOver');
+
+
     document.body.addEventListener('collectCoin', function () {
-        console.log('Coin collected!!!');
+        anim();
+    });
+
+    document.body.addEventListener('gameOver', function () {
+
+        var img = document.createElement('img');
+
+        img.src = 'images/GameOver.png';
+        document.getElementById('container').appendChild(img);
+
     });
 
     document.body.addEventListener('keydown', function (ev) {
         var updateX = 0;
+        var updateY = 0;
         var updateNinja = 0;
         console.log(ev.keyCode);
         switch (ev.keyCode) {
+            case 70:
+                updateX = 0;
+                updateY = -10;
+                break;
             case 37:
+                //startX = startX - 50;
+                //if (!collidesWithPipes({x: startX,
+                //        y: startY,
+                //        width: (ninja.right - ninja.left),
+                //        height: (ninja.bottom - ninja.top)
+                //    })) {
+                //    updateX = 1;
+                //} else {
+                //    startX += 50;
+                //}
+                ninja.x = startX;
+                ninja.y = startY;
                 startX = startX - 50;
-                if (!collidesWithPipes({x: startX,
-                                        y: startY,
-                                        width: (ninja.right - ninja.left),
-                                        height: (ninja.bottom - ninja.top)
-                                        })) {
+                if (!checkForLeftCollision()) {
                     updateX = 1;
-                } else {
-                    startX += 50;
                 }
+                updateX = 1;
+                updateY = 0;
                 break; // left
             case 38:
                 if (!isJumping) {
@@ -1730,34 +1356,174 @@ var mainGame = function () {
                 }
                 break; //up
             case 39:
+                //startX = startX + 50;
+                //if (!collidesWithPipes({x: startX,
+                //                        y: startY,
+                //                        width: (ninja.right - ninja.left),
+                //                        height: (ninja.bottom - ninja.top)
+                //                    })) {
+                //    updateX = -1;
+                //} else {
+                //    startX -= 50;
+                //}
+                ninja.x = startX;
+                ninja.y = startY;
                 startX = startX + 50;
-                if (!collidesWithPipes({x: startX,
-                        y: startY,
-                        width: (ninja.right - ninja.left),
-                        height: (ninja.bottom - ninja.top)
-                    })) {
+                if (!checkForRightCollision()) {
                     updateX = -1;
-                } else {
-                    startX -= 50;
                 }
+                updateX = -1;
+                updateY = 0;
                 break; // right
         }
 
-        //makeNinjaJump(isJumping);
+        //makeNinjaJump(isJumping); //TODO:
 
+        //if (!!updateX) {
+        //    moveStaticObjects(updateX);
+        //    layer.draw();
+        //    enemiesLayer.draw();
+        //    walkingNinjaLayer.draw();
+        //
+        //    if (checkIfNinjaIsOnBonusCode()) {
+        //        document.body.dispatchEvent(event);
+        //    }
+        //
+        //    //runGravity(ninja); //TODO: Check
+        //    //return; //TODO: Why return
+        //}
         if (!!updateX) {
             moveStaticObjects(updateX);
+            //if (!checkForCollisionwhenFalling()) {
+            //    fallingNinjaAnimation();
+            //
+            //}
+
+            if (updateX === 1) {
+                showWalkingNinjaLayer();
+            } else {
+                showJumpingNinjaLayer();
+            }
+
+
             layer.draw();
             enemiesLayer.draw();
             walkingNinjaLayer.draw();
+            jumpingNinjaLayer.draw();
 
             if (checkIfNinjaIsOnBonusCode()) {
-                document.body.dispatchEvent(event);
+                //document.body.dispatchEvent(event);
+            }
+        }
+
+        if (!!updateY) {
+            var initialNinjaTop = ninja.top;
+            var countNinjaJumpSteps = 1;
+            var change = -10;
+
+            jumpingNinjaAnimation();
+
+            var countNinjaFallSteps = 1;
+            change = -10;
+            //fallingNinjaAnimation();
+            var upDirection = true;
+        }
+
+        function jumpingNinjaAnimation() {
+
+            console.log(ninja.top + ' ' + ninja.left);
+            walkingNinjaContent.map(function(item) {
+                item.setY(item.getY() + change);
+                return item;
+            });
+            jumpingNinjaContent.map(function(item) {
+                item.setY(item.getY() + change);
+                return item;
+            });
+            if (checkForCollisionWithBrickWhenJumping()){
+                upDirection = false;
+            }
+            if (checkForCollisionwhenFalling()) {
+                return;
             }
 
-            //runGravity(ninja); //TODO: Check
-            //return; //TODO: Why return
+            ninja.top += change;
+            ninja.bottom += change;
+
+
+            if (countNinjaJumpSteps < 35 && upDirection) {
+                setTimeout(jumpingNinjaAnimation, 30);
+                walkingNinjaLayer.draw();
+                jumpingNinjaLayer.draw();
+                countNinjaJumpSteps += 1;
+            } else if (countNinjaJumpSteps >= 35 || !upDirection ){
+                change = 10;
+                setTimeout(jumpingNinjaAnimation, 30);
+                walkingNinjaLayer.draw();
+                jumpingNinjaLayer.draw();
+                countNinjaJumpSteps += 1;
+            }
+            else if (countNinjaJumpSteps > 70) {
+                return;
+            }
+
         }
+
+        function fallingNinjaAnimation() {
+
+            walkingNinjaContent.map(function(item) {
+                item.setY(item.getY() + 10);
+                return item;
+            });
+            jumpingNinjaContent.map(function(item) {
+                item.setY(item.getY() + 10);
+                return item;
+            });
+
+
+            ninja.top += 10;
+            ninja.bottom += 10;
+
+
+            if (ninja.bottom <= CONSTANTS.GROUND_HEIGHT) {
+                setTimeout(fallingNinjaAnimation, 30);
+                walkingNinjaLayer.draw();
+                jumpingNinjaLayer.draw();
+                countNinjaFallSteps += 1;
+            } else {
+                return;
+            }
+
+        }
+
+        function checkForCollisionWithBrickWhenJumping() {
+            var isCollideWithSpecialBricks = specialBricks.some(function(brick) {
+                //return (brick.getY() + CONSTANTS.GROUND_CELL_WIDTH === ninja.top) && (brick.getX() >= ninja.left && brick.getX() <= ninja.right)
+                return (brick.getY() + CONSTANTS.GROUND_CELL_WIDTH === ninja.top)&& (brick.getX() >= ninja.left && brick.getX() <= ninja.right);
+            });
+
+            return isCollideWithSpecialBricks;
+        }
+
+        function checkForCollisionwhenFalling() {
+            var isCollideWithSpecialBricks = specialBricks.some(function(brick) {
+                return (brick.getY() === ninja.bottom)&& (brick.getX() >= ninja.left && brick.getX() <= ninja.right);
+            });
+            var isCollideRegularBrick = regularBricks.some(function(brick) {
+                return (brick.getY() === ninja.bottom)&& (brick.getX() >= ninja.left && brick.getX() <= ninja.right);
+            });
+            var isCollideWithPipe = pipes.some(function(brick) {
+                return (brick.getY() === ninja.bottom)&& (brick.getX() >= ninja.left && brick.getX() <= ninja.right);
+            });
+
+
+            return isCollideRegularBrick || isCollideWithSpecialBricks || isCollideWithPipe || ninja.bottom > CONSTANTS.GROUND_HEIGHT;
+        }
+
+
+
+
+
 
         //if (!!updateNinja) {
         //    var originalPos = {
@@ -1913,6 +1679,7 @@ var mainGame = function () {
             }
 
             scoreCounterXCoord = calculateScorePointsXCoord(score);
+            anim();
         }, false);
 
         function insertTick(x, y) {
@@ -1977,32 +1744,22 @@ var mainGame = function () {
 
     //setTimeout(makeNinjaJump(isJumping), 100);
 
-    //function anim() {
-    //    //stage.destroyChildren();
-    //    layer = new Kinetic.Layer();
-    //    ninjaLayer = new Kinetic.Layer();
-    //    enemiesLayer = new Kinetic.Layer();
-    //
-    //    calculateNinjaNewCoordinates();
-    //    calculateNewEnemiesCoordinates(); //TODO: To be fixed
-    //    drawEnemies(screenStart, screenEnd);
-    //    drawScoreBoard();
-    //    drawLandscape();
-    //
-    //    ninja.walk();
-    //
-    //    stage.add(layer);
-    //    stage.add(enemiesLayer);
-    //    setTimeout(anim, 1500);
-    //
-    //    return stage.add(ninjaLayer);
-    //}
-    //
-    //anim();
-    if(isJumping) {
-        makeNinjaJump();
+    function anim() {
+        //stage.destroyChildren();
+
+        calculateNinjaNewCoordinates();
+        calculateNewEnemiesCoordinates(); //TODO: To be fixed
+        drawScoreBoard();
+
     }
-    ninjaGravityAnimation();
+
+
+
+
+
+    //if(isJumping) {
+    //    makeNinjaJump();
+    //}
 
     stage.add(layer);
     stage.add(walkingNinjaLayer);
