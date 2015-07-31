@@ -10,13 +10,20 @@ var mainGame = function () {
             (a.y + a.height) > b.getY();
     }
 
-    function collidesTop() {
+    function collidesWithBricks(ninja) {
         //TODO: code it
-        return false;
+        var ifCollideWithRegularBricks = regularBricks.some(function(brick) {
+            return collides(ninja, brick);
+        });
+        var ifCollideWithSpecialBricks = specialBricks.some(function(brick){
+            return collides(ninja, brick);
+        })
+
+        return (ifCollideWithRegularBricks || ifCollideWithSpecialBricks);
     }
 
     function ninjaOnGround() {
-        return 400 === startY + (ninja.bottom - ninja.top) - 10;
+        return startY + (ninja.bottom - ninja.top) < 400;
     }
 
     function collidesWithPipes(ninja2) {
@@ -57,40 +64,67 @@ var mainGame = function () {
     //}
 
     function makeNinjaJump() {
-        walkingNinjaContent = generateWalkingNinja();
-        jumpingNinjaContent = generateJumpingNinja();
-        console.log(walkingNinjaContent);
-        console.log(jumpingNinjaContent);
-        //if(!(ninjaOnGround()) && !(collidesTop())) {
-        if (!(collidesTop())) {
+
+        //if(!(ninjaOnGround()) && !(collidesWithBricks())) {
+        if (isJumping && !(collidesWithBricks({x: startX,
+                y: startY,
+                width: (ninja.right - ninja.left),
+                height: (ninja.bottom - ninja.top)
+            }))) {
+            walkingNinjaContent = generateWalkingNinja();
+            jumpingNinjaContent = generateJumpingNinja();
+            console.log(walkingNinjaContent);
+            console.log(jumpingNinjaContent);
             //TODO: draw ninja, reasign y and call animation again
             moveStaticObjects(0);
-            //layer.draw();
+            layer.draw();
             enemiesLayer.draw();
             jumpingNinjaLayer.draw();
             walkingNinjaLayer.draw();
             startY -= 10;
 
 
-            if (ninjaYBeforeJump - CONSTANTS.NINJA_JUMP_HEIGHT < startY) {
+            if (ninjaYBeforeJump - CONSTANTS.NINJA_JUMP_HEIGHT >= startY) {
                 //requestAnimationFrame(makeNinjaJump(isJumpingNow));
-                return;
-            } else {
                 isJumping = false;
+
+            } else {
+                return;
             }
         }
     }
 
-    //function ninjaGravityAnimation(){
-    //    if (!ninjaOnGround() && !collidesWithPipes({x: startX,
-    //                y: startY,
-    //                width: (ninja.right - ninja.left),
-    //                height: (ninja.bottom - ninja.top)},
-    //            pipeShapesArray)) {
-    //        startY += 10;
-    //
-    //    }
-    //}
+    function ninjaGravityAnimation(){
+        //TODO: make ninja fall when not on grownd and in collision with bricks from down - done?
+        //TODO: make ninja not fall when in collision with bricks but above bricks y - done?
+        if(!ninjaOnGround() && startY + (ninja.bottom - ninja.top) <= CONSTANTS.FIRST_RAW_BRICK_HEIGHT && (collidesWithBricks({x: startX,
+                y: startY,
+                width: (ninja.right - ninja.left),
+                height: (ninja.bottom - ninja.top)
+            })) {
+            //TODO: return a.k.a. don't gravity
+            return;
+        }
+
+        if (!ninjaOnGround() && !isJumping && !collidesWithPipes({x: startX,
+                    y: startY,
+                    width: (ninja.right - ninja.left),
+                    height: (ninja.bottom - ninja.top)}
+            )) {
+            startY += 10;
+            walkingNinjaContent = generateWalkingNinja();
+            jumpingNinjaContent = generateJumpingNinja();
+            console.log(walkingNinjaContent);
+            console.log(jumpingNinjaContent);
+            //TODO: draw ninja, reasign y and call animation again
+            moveStaticObjects(0);
+            layer.draw();
+            enemiesLayer.draw();
+            jumpingNinjaLayer.draw();
+            walkingNinjaLayer.draw();
+        }
+
+    }
 
     //function drawSky() {
     //    var sky = new Kinetic.Rect({
@@ -1968,6 +2002,8 @@ var mainGame = function () {
     if(isJumping) {
         makeNinjaJump();
     }
+    ninjaGravityAnimation();
+
     stage.add(layer);
     stage.add(walkingNinjaLayer);
     stage.add(jumpingNinjaLayer);
