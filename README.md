@@ -4,6 +4,16 @@ An exciting game dedicated to all Telerik Ninjas (JS UI Paradise team)
 Code Ninja is like Super Mario, but in the world of Software Academy of Telerik. To play the game you have to move in direction by keyboard keys. To collect the js code parts placed in bricks, and to reach 100% code in bgcoder console.
 You have to avoid the trainers, because they lower your points.
 
+## Code Logic
+There are several functions that draw the forms of map - sky, brushes, pipes etc. every kineticsj object is saved in array. Then all the arrays are added to layer, then the layer is cached and drawn as image on the stage.
+There is function for drawing the ninja hero. By given constants we can draw it every time there is button clicked.
+
+When the directions are r/l we move only the map, when its u/d we redraw only the ninja.
+When the ninja collide with JS code, the ticks above the playfield go with one test up. If the ninja collides with enemy the tests drop with one.
+
+There are events that check the bonuses colliding with the ninja.
+Also events for jumping and gravity.
+
 ##Team
 | Nickname  | Name |
 | ------------- | ------------- |
