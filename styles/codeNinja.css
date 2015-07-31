@@ -34,7 +34,7 @@ body {
     display: none;
 }
 
-#start-menu {
+#start-menu, #rules-list {
 
     position: absolute;
     left: 470px;
@@ -60,5 +60,20 @@ body {
     color: whitesmoke;
     line-height: 50px;
     vertical-align: middle;
+}
 
+#rules {
+    margin-top: 50px;
+    width: 350px;
+    height: 300px;
+    background-color: forestgreen;
+    border: 2px solid seagreen;
+    border-radius: 10px;
+    display: inline-block;
+    font-family: 'Arial', sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    color: whitesmoke;
+    line-height: 50px;
+    vertical-align: middle;
 }

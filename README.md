@@ -5,8 +5,6 @@ An exciting game dedicated to all Telerik Ninjas (JS UI Paradise team)
 
 ##Task List:
  
--- Draw start menu, start/rules/quit buttons
- - Add rules
 +- Implement a function to save high score to file
  
  Penging Tasks:
@@ -15,8 +13,6 @@ An exciting game dedicated to all Telerik Ninjas (JS UI Paradise team)
  - Draw flag at the end of level - Kalin
  - Add enemies - Venci /Buro/
  - Implement enemies to throw exceptions to hero - Venci /Buro/
-+- Draw start menu, start/rules/quit buttons - Konstantin /Mbyte/
-
  
  ###JavaScript DOM & UI: Teamwork Assignment
  *****************************************
