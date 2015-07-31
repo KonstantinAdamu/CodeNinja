@@ -1,10 +1,21 @@
-﻿# CodeNinja
+﻿# CodeNinja - Paradise team
 An exciting game dedicated to all Telerik Ninjas (JS UI Paradise team)
 ## Game description
 Code Ninja is like Super Mario, but in the world of Software Academy of Telerik. To play the game you have to move in direction by keyboard keys. To collect the js code parts placed in bricks, and to reach 100% code in bgcoder console.
 You have to avoid the trainers, because they lower your points.
 
+##Team
+| Nickname  | Name |
+| ------------- | ------------- |
+| kalin.dimchev  |  Калин Димчев  |
+| Mbyte  | Константин Адаму  |
+| djenitoo  | Джейлян Адемова  |
+| dushka.dragoeva  | Душка Драгоева  |
+| Hristiyan_Andreev  | Християн Андреев  |
+| ventsislav.a.ivanov  | Венцислав Иванов  |
+| nikoladimoff  | Никола Димов - did not take part of project | 
 
+## [Git URL](https://github.com/KonstantinAdamu/CodeNinja)
 
 ##Task List:
  
@@ -22,37 +33,23 @@ You have to avoid the trainers, because they lower your points.
 This document describes the teamwork assignment for Telerik Academy students in JavaScript
 UI & DOM course
 
-#Project Description
-
-Implement a client-side JavaScript application using the HTML graphic APIs – canvas and SVG.
-
-The project can be a game, web statistics or anything else. Sample applications:
-*   Chess
-*   Backgammon
-*   Any jumping game – Super Mario, Bomberman or else
-*   Statistics application – app showing different charts, based on received data
-*   Minesweeper
-*   Solitaire
-*   Bridge-Belote
-*   Paint-like application – drawing shapes, lines, etc
-
 ##General Requirements
 Please define and implement the following assets in your project:
-*   Use the HTML5 canvas
+*   Use the HTML5 canvas - **done**
     *   Or a Canvas framework like KineticJS, paper.js or other
-*   Use SVG
+*   Use SVG - **done**
     *   Or a SVG framework like Raphael JS or other
-*   Create animations
+*   Create animations - **done**
     *   Either for the canvas, SVG or both
-*   The application must work in the latest versions of the browsers: Google Chrome, Mozilla Firefox, Internet Explorer 10/11, Opera and Apple Safar
+*   The application must work in the latest versions of the browsers: Google Chrome, Mozilla Firefox, Internet Explorer 10/11, Opera and Apple Safar ~~ **done**
 
 ##Additional Requirements
 Follow the best practices for producing high-quality code: 
-*   **Correct naming**
+*   **Correct naming** - **done**
 *   **Data encapsulation**
     *   Use OOP and modules
 *   **Strong cohesion** and **loose coupling**
-*   Use **GIT** as a source control system
+*   Use **GIT** as a source control system - **done**
 *   Host it on <a href="http://github.com" title="http://github.com" target="_blank">http://github.com</a>
 
 ##Optional Requirements    
@@ -76,14 +73,3 @@ Put the following in a ZIP archive and submit it (each team member submits the s
     *   The **URL of your Git repository**
     *   Any other information (optionally)
 *   Optionally provide a presentation designed for the project defense
-
-##Public Project Defense
-Each team will have to deliver a public defense of its work to the other students and trainers. You will have only 10 minutes for the following:
-*   Demonstrate the application (very shortly)
-*   Show the source code
-*   Show the commits logs to confirm that team member have contributed.
-*   Optionally you might prepare a presentation (3-4 slides)
-Please be **strict in timing!** Be well prepared for presenting maximum of your work for minimum time. Bring your own laptop. Test it preliminary with the multimedia projector. Open the project assets beforehand to save time. You have 10 minutes, no more
-
-##Give Feedback about Your Teammates
-You will be invited to provide feedback about all your teammates, their attitude to this project, their technical skills, their team working skills, their contribution to the project, etc. The feedback is important part of the project evaluation so take it seriously and be honest
