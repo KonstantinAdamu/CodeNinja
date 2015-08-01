@@ -1745,6 +1745,8 @@ var mainGame = function () {
         scoreIconsDrawingBoard.appendChild(tickFragment);
         scoreIconsDrawingBoard.appendChild(crossFragment);
     }
+    
+    drawScoreBoard();
 
     //TODO: Make holes - 70-72, 87-90, 165-167, 167-171
     //TODO: Second  raw of bricks
@@ -1757,7 +1759,6 @@ var mainGame = function () {
 
         calculateNinjaNewCoordinates();
         calculateNewEnemiesCoordinates(); //TODO: To be fixed
-        drawScoreBoard();
 
     }
 
