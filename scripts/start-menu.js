@@ -1,4 +1,10 @@
 (function () {
+    var music = document.getElementById("backgroundMusic");
+
+    function playMusic() {
+        music.play();
+    }
+
     function changeButtonBackground(ev) {
         if (ev.target.className === 'button') {
             ev.target.style.backgroundColor = 'black';

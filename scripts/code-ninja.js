@@ -1,4 +1,12 @@
 var mainGame = function () {
+
+    var music = document.getElementById("backgroundMusic");
+
+    function playMusic() {
+        music.play();
+    }
+    playMusic();
+
     function checkIfNinjaOutOfMapBounds() {
         //TODO: make ninja not go < 0 or > than map end
     }
@@ -1032,7 +1040,7 @@ var mainGame = function () {
         bodyWalkingNinja = [
             10, 128,
             50, 88,
-            71, 68,//glava
+            71, 68,
             74, 67,
             56 + CONSTANTS.DELTA_X_HEAD, 65,
             34 + CONSTANTS.DELTA_X_HEAD, 44,
@@ -1048,7 +1056,7 @@ var mainGame = function () {
             122, 105,
             122, 105,
             112, 115,
-            103, 99,//mishnica
+            103, 99,
             103, 99,
             96, 108,
             96, 108,
